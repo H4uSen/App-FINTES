@@ -1,0 +1,2 @@
+Aqui irá la lógica de la aplicación, optaremos por manejar la lógica y la funcionalidad de la aplicación dentro de si misma y no
+utilizar servicios externos, como APIs o bases de datos, para mantener la simplicidad del proyecto.
