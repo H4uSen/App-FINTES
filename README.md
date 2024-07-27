@@ -1,3 +1,3 @@
-# app_fintes
+# App FINTES
 
-A new Flutter project.
+Aplicación móvil multiplataforma del proyecto FinTes
