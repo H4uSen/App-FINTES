@@ -14,13 +14,8 @@ class _InicioPageState extends State<InicioPage> {
       appBar: AppBar(
         title: const Text(
           'Inicio',
-          style: TextStyle(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
-          ),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromRGBO(131, 180, 255, 1),
       ),
 
 
