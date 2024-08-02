@@ -1,3 +1,4 @@
+import 'package:app_fintes/pages/inicio_page.dart';
 import 'package:app_fintes/widgets/custom.dart';
 import 'package:flutter/material.dart';
 
@@ -74,6 +75,10 @@ class LoginPageState extends State<LoginPage> {
                       onPressed: () {
                         if (!formkey.currentState!.validate()) return;
                         // Aquí puedes añadir la lógica para el inicio de sesión
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const InicioPage()),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
