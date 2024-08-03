@@ -1,4 +1,4 @@
-import 'package:app_fintes/pages/inicio_page.dart';
+import 'package:app_fintes/pages/home_page.dart';
 import 'package:app_fintes/widgets/custom.dart';
 import 'package:flutter/material.dart';
 

@@ -16,7 +16,7 @@ ThemeData customThemeData = ThemeData(
         ),
         appBarTheme:const AppBarTheme(
           backgroundColor: CustomColors.lightBlue,
-          titleTextStyle: TextStyle(color: CustomColors.black, fontSize: 30),
+          titleTextStyle: TextStyle(color: CustomColors.black, fontSize: 30, fontFamily: 'Roboto'),
         ),
         textTheme: const TextTheme(
           titleSmall: TextStyle(color: CustomColors.black, fontSize: 20),

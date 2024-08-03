@@ -32,7 +32,7 @@ class PrincipalPage extends StatelessWidget {
                     const Text(
                       'FINTES',
                       style: TextStyle(
-                        fontSize: 125,
+                        fontSize: 100,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.bold,
                         color: Colors.black, 
