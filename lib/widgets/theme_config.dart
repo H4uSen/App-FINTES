@@ -16,21 +16,21 @@ ThemeData customThemeData = ThemeData(
         ),
         appBarTheme:const AppBarTheme(
           backgroundColor: CustomColors.lightBlue,
-          titleTextStyle: TextStyle(color: CustomColors.black, fontSize: 30, fontFamily: 'Roboto'),
+          titleTextStyle: TextStyle(color: CustomColors.black, fontSize: 30, fontFamily: 'Roboto', wordSpacing: 2),
         ),
         textTheme: const TextTheme(
-          titleSmall: TextStyle(color: CustomColors.black, fontSize: 20),
-          bodySmall: TextStyle(color: CustomColors.black, fontSize: 15),
-          headlineSmall: TextStyle(color: CustomColors.black, fontSize: 25),
+          titleSmall: TextStyle(color: CustomColors.black, fontSize: 20, wordSpacing: 2),
+          bodySmall: TextStyle(color: CustomColors.black, fontSize: 15, wordSpacing: 2),
+          headlineSmall: TextStyle(color: CustomColors.black, fontSize: 25, wordSpacing: 2),
 
-          titleMedium: TextStyle(color: CustomColors.black, fontSize: 30),
-          bodyMedium: TextStyle(color: CustomColors.black, fontSize: 20),
-          headlineMedium: TextStyle(color: CustomColors.black, fontSize: 35),
-          labelMedium: TextStyle(color: CustomColors.black, fontSize: 20),
+          titleMedium: TextStyle(color: CustomColors.black, fontSize: 30, wordSpacing: 2),
+          bodyMedium: TextStyle(color: CustomColors.black, fontSize: 20, wordSpacing: 2),
+          headlineMedium: TextStyle(color: CustomColors.black, fontSize: 35, wordSpacing: 2),
+          labelMedium: TextStyle(color: CustomColors.black, fontSize: 20, wordSpacing: 2),
 
-          titleLarge: TextStyle(color: CustomColors.black, fontSize: 40),
-          bodyLarge: TextStyle(color: CustomColors.black, fontSize: 25),
-          headlineLarge: TextStyle(color: CustomColors.black, fontSize: 45),
-          labelLarge: TextStyle(color: CustomColors.black, fontSize: 25),
+          titleLarge: TextStyle(color: CustomColors.black, fontSize: 40, wordSpacing: 2),
+          bodyLarge: TextStyle(color: CustomColors.black, fontSize: 25, wordSpacing: 2),
+          headlineLarge: TextStyle(color: CustomColors.black, fontSize: 45, wordSpacing: 2),
+          labelLarge: TextStyle(color: CustomColors.black, fontSize: 25, wordSpacing: 2),
         ),
       );

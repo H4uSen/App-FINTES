@@ -41,7 +41,7 @@ flutter:
   fonts:
      - family: Roboto
        fonts:
-         - asset: assets/fonts/Roboto-BlackItalic.ttf
+         - asset: assets/fonts/Roboto-Black.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
