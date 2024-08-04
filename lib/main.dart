@@ -1,8 +1,9 @@
+// main.dart
 import 'package:app_fintes/pages/principal_page.dart';
+import 'package:app_fintes/pages/login_page.dart';
+import 'package:app_fintes/pages/registro_page.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
-
-//import 'package:flutter/registro_page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -16,7 +17,12 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       theme: customThemeData,
       debugShowCheckedModeBanner: false,
-      home: const PrincipalPage(),
+      initialRoute: '/principal',
+      routes: {
+        '/principal': (context) => const PrincipalPage(),
+        '/login': (context) => const LoginPage(),
+        '/registro': (context) => const RegistroPage(),
+      },
     );
   }
 }

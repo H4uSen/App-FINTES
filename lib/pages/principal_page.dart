@@ -1,5 +1,6 @@
-import 'package:app_fintes/pages/login_page.dart';
-import 'package:app_fintes/pages/registro_page.dart';
+// pages/principal_page.dart
+//import 'package:app_fintes/pages/login_page.dart';
+//import 'package:app_fintes/pages/registro_page.dart';
 import 'package:flutter/material.dart';
 
 
@@ -41,10 +42,7 @@ class PrincipalPage extends StatelessWidget {
                     const SizedBox(height: 15),
                     OutlinedButton(
                       onPressed: (){
-                         Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) =>  const LoginPage()),
-                         );
+                          Navigator.pushNamed(context, '/login');
                       },
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 55, vertical: 10),
@@ -66,10 +64,7 @@ class PrincipalPage extends StatelessWidget {
                     const SizedBox(height: 35),
                     OutlinedButton(
                      onPressed: (){
-                         Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) =>  const RegistroPage()),
-                         );
+                        Navigator.pushNamed(context, '/registro');
                       },
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 65, vertical: 10),

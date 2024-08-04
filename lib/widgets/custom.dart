@@ -1,3 +1,4 @@
+// widgets/custom.dart
 import 'package:flutter/material.dart';
 
 class CustomForm extends StatelessWidget {
@@ -18,15 +19,16 @@ class CustomForm extends StatelessWidget {
   final Icon? icon;
   final IconButton? icon1;
   final String? Function(String?)? validator;
-  final bool obscureText; // Añadido
+  final bool obscureText; 
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       validator: validator,
-      obscureText: obscureText, // Utilizar el parámetro aquí
+      obscureText: obscureText,
       keyboardType: TextInputType.text,
+      style: const TextStyle(fontSize: 18),
       maxLines: 1,
       decoration: InputDecoration(
         hintText: hintText,
@@ -34,6 +36,8 @@ class CustomForm extends StatelessWidget {
         prefixIcon: icon,
         suffixIcon: icon1,
         border: const OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        labelStyle: const TextStyle(fontSize: 18),
+        hintStyle: const TextStyle(fontSize: 18),
         errorText: null,
       ),
     );
