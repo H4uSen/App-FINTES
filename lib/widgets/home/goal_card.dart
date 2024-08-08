@@ -3,11 +3,12 @@ import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 
 class GoalCard extends StatefulWidget {
-  const GoalCard({super.key, required this.title, required this.goal, required this.collected, this.onTap, });
+  const GoalCard({super.key, required this.title, required this.goal, required this.collected, this.showLeadingButton = true, this.onTap, });
 
   final String title;
   final double goal;
   final double collected;
+  final bool showLeadingButton;
   final void Function()? onTap;
 
   @override
@@ -15,6 +16,8 @@ class GoalCard extends StatefulWidget {
 }
 
 class _GoalCardState extends State<GoalCard> {
+ 
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -59,13 +62,14 @@ class _GoalCardState extends State<GoalCard> {
                       GoalCardRow(title: 'Meta:', amount: widget.goal, ),
                       GoalCardRow(title: 'Reunido:', amount: widget.collected),
                       GoalCardRow(title: 'Restante:', amount: widget.goal - widget.collected, bkgColor: CustomColors.lightBlue,),
+                      
+                      if(widget.showLeadingButton)
                       ListTile(
                       visualDensity: VisualDensity.compact,
                         title: const Center(child: Text('Ver registros >',style: TextStyle(color: CustomColors.darkBlue, fontSize: 20),)),
-                        onTap: widget.onTap
-                          
-                        ,
-                      ),
+                        onTap: widget.onTap,
+                      )
+                      else const SizedBox(height: 10.0),
                     ],
                   ),
                 ),

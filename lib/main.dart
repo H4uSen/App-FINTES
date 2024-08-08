@@ -3,6 +3,7 @@ import 'package:app_fintes/pages/home_page.dart';
 import 'package:app_fintes/pages/principal_page.dart';
 import 'package:app_fintes/pages/login_page.dart';
 import 'package:app_fintes/pages/registro_page.dart';
+import 'package:app_fintes/pages/registrydetails_page.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +25,7 @@ class MainApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/registro': (context) => const RegistroPage(),
         '/home': (context) => const InicioPage(),
+        '/registrydetails': (context) => const RegistrydetailsPage(),
       },
     );
   }

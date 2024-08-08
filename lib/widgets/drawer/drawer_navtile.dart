@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 
 class DrawerNavTile extends StatelessWidget {
   const DrawerNavTile({
-    super.key, required this.title, required this.icon, required this.iconBkgColor, required this.onTap, this.subtitle, this.subColor =CustomColors.black
+    super.key, required this.title, required this.icon, required this.iconBkgColor, 
+    required this.onTap, this.subtitle, this.subColor, this.isDeposit
   });
   final String? subtitle;
   final String title;
   final IconData icon;
   final Color iconBkgColor;
-  final Color subColor;
+  final Color? subColor;
+  final bool? isDeposit;
   final void Function()? onTap;
 
   @override
@@ -38,7 +40,13 @@ class DrawerNavTile extends StatelessWidget {
         ),
         subtitle: 
           (subtitle != null )?
-            Row(mainAxisAlignment: MainAxisAlignment.end ,children:[Text(subtitle!, style: TextStyle(fontSize: 15, color: subColor),)])
+            Row(mainAxisAlignment: MainAxisAlignment.end ,
+              children:[
+                Text(subtitle!, 
+                  style: TextStyle(
+                    fontSize: 15, 
+                    color: (subColor != null)? subColor: (subColor == null && isDeposit == null)? CustomColors.black: (isDeposit == true)? CustomColors.green: CustomColors.red,
+                    ),),],)
             :null,
         title: Padding(
             padding: const EdgeInsets.only(left: 10),

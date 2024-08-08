@@ -5,14 +5,15 @@ class CustomColors {
   static const Color black = Color.fromRGBO(26, 33, 48, 1);
   static const Color lightBlue = Color.fromRGBO(131, 180, 255, 1);
   static const Color darkBlue = Color.fromRGBO(90, 114, 160, 1);
-  static const Color green = Color.fromARGB(255, 64, 172, 68);
+  static const Color green = Color.fromARGB(255, 72, 155, 75);
   static const Color red =  Color.fromARGB(255, 189, 64, 55);
+  static const Color yellow = Color.fromARGB(255, 235, 235, 126);
 }
 
 
 
 ThemeData customThemeData = ThemeData(
-        fontFamily:'Roboto',
+        fontFamily:'Roboto-Regular',
         primaryColor: CustomColors.lightBlue,
         scaffoldBackgroundColor: CustomColors.white,
         buttonTheme: const ButtonThemeData(
@@ -21,7 +22,7 @@ ThemeData customThemeData = ThemeData(
         ),
         appBarTheme:const AppBarTheme(
           backgroundColor: CustomColors.lightBlue,
-          titleTextStyle: TextStyle(color: CustomColors.black, fontSize: 30, fontFamily: 'Roboto', wordSpacing: 2),
+          titleTextStyle: TextStyle(color: CustomColors.black, fontSize: 30, fontFamily: 'Roboto-Regular', wordSpacing: 2),
         ),
         textTheme: const TextTheme(
           
