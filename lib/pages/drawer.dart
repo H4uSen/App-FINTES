@@ -1,5 +1,5 @@
 import 'package:app_fintes/widgets/drawer/divider.dart';
-import 'package:app_fintes/widgets/drawer/drawer_navbutton.dart';
+import 'package:app_fintes/widgets/drawer/drawer_navtile.dart';
 import 'package:app_fintes/widgets/drawer/setting_navtile.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +65,7 @@ class CustomDrawer extends StatelessWidget {
                 
                 //TODO: Hacer que los botones se les ponga una sombra para identificar la pagina actual y añadir la navegación a las otras paginas
                 const CustomDivider(title: 'Cuentas'),
+                DrawerNavTile(title: 'Cuenta de ahorros', icon: Icons.attach_money_rounded, onTap: (){}, iconBkgColor: CustomColors.green,),
                 const CustomDivider(title: 'Vacío', showLines: false),
                 //TODO: Agregar un list builder que cree los botones y muestre las cuentas del usuario
                 const CustomDivider(title: 'Metas'),
@@ -78,7 +79,11 @@ class CustomDrawer extends StatelessWidget {
           ),
       
           const SettingNavtile(title: 'Gestionar cuenta',icon: Icons.settings),
-          const SettingNavtile(title: 'Cerrar sesión', icon: Icons.logout_outlined)
+          SettingNavtile(
+              title: 'Cerrar sesión', 
+              icon: Icons.logout_outlined,
+              onTap: () => Navigator.pushReplacementNamed(context, '/principal'),
+              ),
           
         ],
       ),

@@ -1,4 +1,5 @@
 // main.dart
+import 'package:app_fintes/pages/home_page.dart';
 import 'package:app_fintes/pages/principal_page.dart';
 import 'package:app_fintes/pages/login_page.dart';
 import 'package:app_fintes/pages/registro_page.dart';
@@ -22,6 +23,7 @@ class MainApp extends StatelessWidget {
         '/principal': (context) => const PrincipalPage(),
         '/login': (context) => const LoginPage(),
         '/registro': (context) => const RegistroPage(),
+        '/home': (context) => const InicioPage(),
       },
     );
   }

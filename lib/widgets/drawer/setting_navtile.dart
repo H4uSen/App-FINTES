@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 
 class SettingNavtile extends StatelessWidget {
   const SettingNavtile({
-    super.key, required this.title, required this.icon, this.subtitle 
+    super.key, required this.title, required this.icon, this.subtitle, this.onTap 
   });
   final String title;
   final String? subtitle;
   final IconData icon;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,7 @@ class SettingNavtile extends StatelessWidget {
           padding: const EdgeInsets.only(left: 20),
           child: Text(title, style: Theme.of(context).textTheme.bodyMedium,maxLines: 1, overflow: TextOverflow.ellipsis,),
         ),
-      onTap: (){});
+      onTap: onTap
+      );
   }
 }

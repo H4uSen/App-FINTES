@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 
 class DrawerNavTile extends StatelessWidget {
   const DrawerNavTile({
-    super.key, required this.title, required this.icon, required this.iconBkgColor, required this.onTap, this.subtitle
+    super.key, required this.title, required this.icon, required this.iconBkgColor, required this.onTap, this.subtitle, this.subColor =CustomColors.black
   });
   final String? subtitle;
   final String title;
   final IconData icon;
   final Color iconBkgColor;
+  final Color subColor;
   final void Function()? onTap;
 
   @override
@@ -35,11 +36,15 @@ class DrawerNavTile extends StatelessWidget {
           ),
           child: Icon(icon, color: CustomColors.black, size: 40),
         ),
-        subtitle: (subtitle != null)?Text('Hello', style: Theme.of(context).textTheme.bodySmall,):null,
+        subtitle: 
+          (subtitle != null )?
+            Row(mainAxisAlignment: MainAxisAlignment.end ,children:[Text(subtitle!, style: TextStyle(fontSize: 15, color: subColor),)])
+            :null,
         title: Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Text(title, style: Theme.of(context).textTheme.bodyLarge, maxLines: 1, overflow: TextOverflow.ellipsis,),
+            padding: const EdgeInsets.only(left: 10),
+            child: Text(title, style: Theme.of(context).textTheme.titleSmall, maxLines: 2, overflow: TextOverflow.ellipsis,),
           ),
+        
         onTap: onTap,
       ),
     );

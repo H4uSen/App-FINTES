@@ -63,7 +63,7 @@ class PrincipalPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 35),
                     OutlinedButton(
-                     onPressed: (){
+                      onPressed: (){
                         Navigator.pushNamed(context, '/registro');
                       },
                       style: OutlinedButton.styleFrom(
