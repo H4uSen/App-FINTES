@@ -129,6 +129,51 @@ class GestionCuentas extends StatelessWidget {
                 // 
               },
             ),
+                   
+            const CustomDivider(
+              title: 'Pagos recurrentes',
+              showLines: true,
+            ),
+            const SizedBox(height: 15),
+        
+            AcctListtile(
+              title: 'Netflix',
+              leadingIcon: Icons.calendar_today,
+              editIcon: Icons.edit,
+              deleteIcon: Icons.delete,
+              leadingIconBackgroundColor: Colors.yellow, 
+              leadingIconColor: Colors.black, 
+              onEdit: () {
+                // 
+              },
+              onDelete: () {
+                //
+              },
+            ),
+            const SizedBox(height: 10),
+             AcctListtile(
+              title: 'Renta',
+              leadingIcon: Icons.calendar_today, 
+              editIcon: Icons.edit,
+              deleteIcon: Icons.delete,
+              leadingIconBackgroundColor: Colors.yellow, 
+              leadingIconColor: Colors.black, 
+              onEdit: () {
+                // 
+              },
+              onDelete: () {
+                // 
+              },
+            ),
+           
+            const SizedBox(height: 10),
+             CustomOutlinedButton(
+              label: 'Añadir Pago Recurrente',
+              onPressed: () {
+                // 
+              },
+            ),
+             const SizedBox(height: 15),
        ],
         ),
       ),
