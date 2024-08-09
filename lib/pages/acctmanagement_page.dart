@@ -71,7 +71,64 @@ class GestionCuentas extends StatelessWidget {
                 // 
               },
             ),
-            
+                
+            const CustomDivider(
+              title: 'Metas',
+              showLines: true,
+            ),
+            const SizedBox(height: 15),
+        
+            AcctListtile(
+              title: 'Efectivo',
+              leadingIcon: Icons.star_border,
+              editIcon: Icons.edit,
+              deleteIcon: Icons.delete,
+              leadingIconBackgroundColor: Colors.yellow, 
+              leadingIconColor: Colors.black, 
+              onEdit: () {
+                // 
+              },
+              onDelete: () {
+                //
+              },
+            ),
+            const SizedBox(height: 10),
+            AcctListtile(
+              title: 'Tarjeta',
+              leadingIcon: Icons.star_border, 
+              editIcon: Icons.edit,
+              deleteIcon: Icons.delete,
+              leadingIconBackgroundColor: Colors.yellow, 
+              leadingIconColor: Colors.black, 
+              onEdit: () {
+                // 
+              },
+              onDelete: () {
+                // 
+              },
+            ),
+            const SizedBox(height: 10),
+             AcctListtile(
+              title: 'Ahorro',
+              leadingIcon: Icons.star_border, 
+              editIcon: Icons.edit,
+              deleteIcon: Icons.delete,
+              leadingIconBackgroundColor: Colors.yellow, 
+              leadingIconColor: Colors.black, 
+              onEdit: () {
+                // 
+              },
+              onDelete: () {
+                // 
+              },
+            ),
+            const SizedBox(height: 10),
+             CustomOutlinedButton(
+              label: 'Añadir Meta',
+              onPressed: () {
+                // 
+              },
+            ),
        ],
         ),
       ),
