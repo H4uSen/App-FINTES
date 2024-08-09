@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+// widgets/theme_config.dart
+import 'package:flutter/material.dart';import 'package:flutter/material.dart';
 
 class CustomColors {
   static const Color white = Color.fromRGBO(253, 255, 226, 1);
@@ -22,7 +23,7 @@ ThemeData customThemeData = ThemeData(
         ),
         appBarTheme:const AppBarTheme(
           backgroundColor: CustomColors.lightBlue,
-          titleTextStyle: TextStyle(color: CustomColors.black, fontSize: 30, fontFamily: 'Roboto-Regular', wordSpacing: 2),
+          titleTextStyle: TextStyle(color: CustomColors.black, fontSize: 26, fontFamily: 'Roboto-Regular', wordSpacing: 2),
         ),
         textTheme: const TextTheme(
           

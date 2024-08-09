@@ -1,4 +1,5 @@
 // main.dart
+import 'package:app_fintes/pages/acctmanagement_page.dart';
 import 'package:app_fintes/pages/home_page.dart';
 import 'package:app_fintes/pages/principal_page.dart';
 import 'package:app_fintes/pages/login_page.dart';
@@ -26,6 +27,7 @@ class MainApp extends StatelessWidget {
         '/registro': (context) => const RegistroPage(),
         '/home': (context) => const InicioPage(),
         '/registrydetails': (context) => const RegistrydetailsPage(),
+        '/accountmanagement': (context) => const GestionCuentas(),
       },
     );
   }
