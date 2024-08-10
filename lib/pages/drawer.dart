@@ -1,4 +1,5 @@
 import 'package:app_fintes/business_logic/dummy_data.dart';
+// pages/drawer.dart
 import 'package:app_fintes/business_logic/transaction_details.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
 import 'package:app_fintes/widgets/drawer/drawer_navtile.dart';
@@ -117,7 +118,10 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
       
-          const SettingNavtile(title: 'Gestionar cuenta',icon: Icons.settings),
+          SettingNavtile(title: 'Gestionar cuenta',icon: Icons.settings, 
+          onTap: () => Navigator.pushReplacementNamed(context, '/accountmanagement'),
+          ),
+
           SettingNavtile(
               title: 'Cerrar sesión', 
               icon: Icons.logout_outlined,

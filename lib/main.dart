@@ -1,5 +1,6 @@
-// main.dart
+
 import 'package:app_fintes/pages/accountdetails_page.dart';
+import 'package:app_fintes/pages/acctmanagement_page.dart';
 import 'package:app_fintes/pages/home_page.dart';
 import 'package:app_fintes/pages/principal_page.dart';
 import 'package:app_fintes/pages/login_page.dart';
@@ -28,6 +29,7 @@ class MainApp extends StatelessWidget {
         '/home': (context) => const InicioPage(),
         '/registrydetails': (context) => const RegistrydetailsPage(),
         '/accountdetails': (context) => const AccountDetailsPage(),
+        '/accountmanagement': (context) => const GestionCuentas(),
       },
     );
   }

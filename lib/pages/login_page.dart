@@ -1,4 +1,4 @@
-import 'package:app_fintes/pages/home_page.dart';
+// pages/login_page.dart
 import 'package:app_fintes/widgets/custom.dart';
 import 'package:flutter/material.dart';
 
@@ -46,10 +46,10 @@ class LoginPageState extends State<LoginPage> {
                       hintText: 'Ingrese su correo',
                       icon: const Icon(Icons.email),
                       validator: (valor) {
-                        if (valor == null || valor.isEmpty) {
+                      /*  if (valor == null || valor.isEmpty) {
                           return 'El correo es obligatorio';
                         }
-                        return null;
+                      */  return null;
                       },
                     ),
                     const SizedBox(height: 25),
@@ -74,11 +74,8 @@ class LoginPageState extends State<LoginPage> {
                     ElevatedButton(
                       onPressed: () {
                         if (!formkey.currentState!.validate()) return;
-                        // Aquí puedes añadir la lógica para el inicio de sesión
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => const InicioPage()),
-                        );
+                        
+                       Navigator.pushNamed(context, '/home');
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
