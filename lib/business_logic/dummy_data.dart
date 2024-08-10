@@ -1,6 +1,14 @@
 import 'package:app_fintes/business_logic/transaction_details.dart';
 
-List<Account> accounts = [
+List<RegistryDetails> getAccountRegistries(List<RegistryDetails> registries,String accountName) {
+    for(var registry in registries) {
+      (registry.account.accountName == accountName)?registries.add(registry):null;
+    }
+    return registries;
+  }
+
+
+List<Account> accounts = const [
   Account(
     accountId: '1',
     accountName: 'Efectivo',
@@ -21,6 +29,12 @@ List<Account> accounts = [
     accountName: 'Carro',
     accountType: AccountType.goal,
     goalAmount: 200000,
+  ),
+  Account(
+    accountId: '5',
+    accountName: 'Telefono',
+    accountType: AccountType.goal,
+    goalAmount: 24000,
   ),
   Account(
     accountId: '5',
@@ -61,11 +75,18 @@ List<RegistryDetails> registries = [
     title: "Aporte para el carro", 
     description: "este es un ejemplo de una actividad reciente con una descripción larga, me gustaria ver como se ve y que se ajuste de manera correcta en la pantalla", 
     account: accounts.firstWhere((e) => e.accountName == 'Carro'), 
-    amount: 3200, 
+    amount: 12000, 
     isDeposit: true
     ),
   RegistryDetails(
-    registryId: '5',
+    registryId: '5', 
+    title: 'Telefono', 
+    description: 'Este es un ejemplo de', 
+    account: accounts.firstWhere((e) => e.accountName == 'Telefono'), 
+    amount: 10000, 
+    isDeposit: true),
+  RegistryDetails(
+    registryId: '6',
     title: 'Pago de Netflix',
     description: 'este es un ejemplo de una actividad reciente con una descripción larga, me gustaria ver como se ve y que se ajuste de manera correcta en la pantalla',
     amount: 250,

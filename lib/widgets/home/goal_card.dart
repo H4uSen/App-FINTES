@@ -3,21 +3,20 @@ import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 
 class GoalCard extends StatefulWidget {
-  const GoalCard({super.key, required this.title, required this.goal, required this.collected, this.showLeadingButton = true, this.onTap, });
+  const GoalCard({super.key, required this.title, 
+    this.showLeadingButton = true, this.onTap, required this.row1, required this.row2, 
+    required this.row3, required this.money1, required this.money2, required this.money3, });
 
   final String title;
-  final double goal;
-  final double collected;
+  final String row1, row2, row3;
+  final double money1, money2, money3;
   final bool showLeadingButton;
   final void Function()? onTap;
 
   @override
   State<GoalCard> createState() => _GoalCardState();
 }
-
 class _GoalCardState extends State<GoalCard> {
- 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -59,9 +58,9 @@ class _GoalCardState extends State<GoalCard> {
                   child: Column(
                     children: [
                       const SizedBox(height: 10.0),
-                      GoalCardRow(title: 'Meta:', amount: widget.goal, ),
-                      GoalCardRow(title: 'Reunido:', amount: widget.collected),
-                      GoalCardRow(title: 'Restante:', amount: widget.goal - widget.collected, bkgColor: CustomColors.lightBlue,),
+                      GoalCardRow(title: widget.row1, amount: widget.money1, ),
+                      GoalCardRow(title: widget.row2, amount: widget.money2),
+                      GoalCardRow(title: widget.row3, amount: widget.money3, bkgColor: CustomColors.lightBlue,),
                       
                       if(widget.showLeadingButton)
                       ListTile(

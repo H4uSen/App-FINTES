@@ -1,3 +1,4 @@
+import 'package:app_fintes/business_logic/dummy_data.dart';
 import 'package:app_fintes/business_logic/transaction_details.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
 import 'package:app_fintes/widgets/drawer/drawer_navtile.dart';
@@ -57,32 +58,59 @@ class CustomDrawer extends StatelessWidget {
           Expanded(
             child: ListView(
               children: [
+
                 DrawerNavTile(
                   title: 'Inicio', 
                   icon: Icons.home_rounded, 
                   iconBkgColor: CustomColors.white, 
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.pushNamed(context, '/home');
+                  },
                 ),
                 
+
                 //TODO: Hacer que los botones se les ponga una sombra para identificar la pagina actual y añadir la navegación a las otras paginas
                 const CustomDivider(title: 'Cuentas'),
-                DrawerNavTile(title: 'Cuenta de ahorros', 
-                  icon: Icons.attach_money_rounded, 
-                  onTap: (){}, 
-                  iconBkgColor: CustomColors.green,),
+                for (var account in accounts)
+                  if (account.accountType == AccountType.account)
+                    DrawerNavTile(
+                      title: account.accountName, 
+                      icon: Icons.attach_money_rounded, 
+                      onTap: (){
+                        Navigator.pushNamed(context, '/accountdetails', arguments: account);
+                      }, 
+                      iconBkgColor: CustomColors.green,
+                    ),
                 const CustomDivider(title: 'Vacío', showLines: false),
-                //TODO: Agregar un list builder que cree los botones y muestre las cuentas del usuario
 
 
                 const CustomDivider(title: 'Metas'),
-                DrawerNavTile(title: 'Carro', 
-                  icon: Icons.star_border_rounded, 
-                  onTap: (){}, 
-                  iconBkgColor: CustomColors.yellow,),
+                for (var account in accounts)
+                  if (account.accountType == AccountType.goal)
+                    DrawerNavTile(
+                      title: account.accountName, 
+                      icon: Icons.flag_rounded, 
+                      onTap: (){
+                        Navigator.pushNamed(context, '/accountdetails', arguments: account);
+                      }, 
+                      iconBkgColor: CustomColors.yellow,
+                    ),
                 const CustomDivider(title: 'Vacío', showLines: false),
 
 
                 const CustomDivider(title: 'Pagos recurrentes'),
+                for (var account in accounts)
+                  if (account.accountType == AccountType.recurrentPayment)
+                    DrawerNavTile(
+                      title: account.accountName, 
+                      icon: Icons.lock_clock,
+                      subtitle: fixedCurrency(account.recurrentAmount!, "L."),
+                      subColor: CustomColors.red,
+                      onTap: (){
+                        Navigator.pushNamed(context, '/accountdetails', arguments: account);
+                      }, 
+                      iconBkgColor: CustomColors.red,
+                    ),
                 const CustomDivider(title: 'Vacío', showLines: false),
                 
               ],

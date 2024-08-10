@@ -30,46 +30,27 @@ class _InicioPageState extends State<InicioPage> {
         ),
         centerTitle: true,
       ),
-      /*body: ListView(
-        children: [
-          const CustomDivider(title: 'Resumen de metas'),
-          //#TODO: Implementar la navegación a la pantalla de registros
-          GoalCard(title: 'Carros', goal: 20000, collected: 10000, onTap: (){},showLeadingButton: false,),
-
-          const CustomDivider(title: 'Actividades recientes'),
-          RecentActivityTile(
-            title: 'Dinero recibido por x cosa',
-            description: 'este es un ejemplo de una actividad reciente con una descripción larga, me gustaria ver como se ve y que se ajuste de manera correcta en la pantalla',
-            account: 'Cuenta de ahorros',  
-            amount: 100000,
-            isDeposit: true,
-            onTap:(){},
-          ),
-          RecentActivityTile(
-            title: 'Compra X Amazon',
-            description: 'este es un ejemplo de una actividad reciente con una descripción larga, me gustaria ver como se ve y que se ajuste de manera correcta en la pantalla',
-            account: 'Tarjeta 1',  
-            amount: 500,
-            isDeposit: false,
-            onTap:(){},
-          ),
-        ],  
-
-      ),*/
       
       body: Column(
         children: [
           const CustomDivider(title: 'Resumen de metas'),
           Expanded(
             child: ListView.builder(
+                  
                   itemCount: goalsRegistries.length,
                   itemBuilder: (context, index) {
+                      double goal = (goalsRegistries[index].account.goalAmount == null) ? 0: goalsRegistries[index].account.goalAmount!;
+                      double collected = (goalsRegistries[index].account.goalAmount == null) ? 0: goalsRegistries[index].account.getGoalCollected(goalsRegistries, goalsRegistries[index].account.accountName);
                       return GoalCard(
                       title: goalsRegistries[index].account.accountName,
-                      goal: (goalsRegistries[index].account.goalAmount == null) ? 0: goalsRegistries[index].account.goalAmount!,
-                      collected: (goalsRegistries[index].account.goalAmount == null) ? 0: goalsRegistries[index].account.goalCollected(goalsRegistries),
+                      row1: 'Objetivo:',
+                      row2: 'Reunido:',
+                      row3: 'Restante:',
+                      money1: goal,
+                      money2: collected,
+                      money3: goal - collected,
                       onTap: (){
-                        Navigator.pushNamed(context, '/registrydetails', arguments: registries[index]);
+                        Navigator.pushNamed(context, '/accountdetails', arguments: goalsRegistries[index].account);
                       },
                       showLeadingButton: true,
                     );
@@ -77,8 +58,28 @@ class _InicioPageState extends State<InicioPage> {
                   },
                 ),
           ),
-
           const CustomDivider(title: 'Actividades recientes'),
+          Expanded(
+            child: ListView.builder(
+                  
+                  itemCount: registries.length,
+                  itemBuilder: (context, index) {
+                      return RecentActivityTile(
+                      title: registries[index].title,
+                      description: registries[index].description,
+                      account: registries[index].account.accountName,  
+                      amount: registries[index].amount,
+                      isDeposit: registries[index].isDeposit,
+                      onTap: (){
+                        Navigator.pushNamed(context, '/registrydetails', arguments: registries[index]);
+                      },
+                    );
+                    
+                  },
+                ),
+          ),
+          
+
         ],
       ),
 

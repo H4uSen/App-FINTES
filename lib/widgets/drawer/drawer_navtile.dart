@@ -18,7 +18,7 @@ class DrawerNavTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 50),
+      padding: const EdgeInsets.only(right: 50, top: 5, bottom: 5),
       child: ListTile(
         visualDensity: VisualDensity.compact,
         tileColor: CustomColors.white,

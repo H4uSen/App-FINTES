@@ -1,3 +1,5 @@
+import 'package:app_fintes/business_logic/dummy_data.dart';
+
 String transactionSymbol (bool isDeposit) {
   return isDeposit ? '+' : '-';
 }
@@ -32,14 +34,32 @@ class Account {
     this.goalAmount, 
   });
 
-  double goalCollected(List<RegistryDetails> goalRegistries) {
+
+
+
+
+double getGoalCollected(List<RegistryDetails> goalRegistries, String goalAccountName) {
     double collected = 0;
     for(var goal in goalRegistries) {
-      collected += goal.amount;
+      (goal.account.accountName == goalAccountName)?collected += goal.amount:null;
     }
     return collected;
   }
 }
+double getAccountDeposits(List<RegistryDetails> accountRegistries, String accountName) {
+    double deposits = 0;
+    for(var account in accountRegistries) {
+      (account.account.accountName == accountName && account.isDeposit)?deposits += account.amount:null;
+    }
+    return deposits;
+  }
+double getAccountWithdrawals(List<RegistryDetails> accountRegistries, String accountName) {
+    double withdrawals = 0;
+    for(var account in accountRegistries) {
+      (account.account.accountName == accountName && !account.isDeposit)?withdrawals += account.amount:null;
+    }
+    return withdrawals;
+  }
 
 
 class RegistryDetails {
