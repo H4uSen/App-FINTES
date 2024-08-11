@@ -1,6 +1,7 @@
-import 'package:app_fintes/business_logic/dummy_data.dart';
+import 'package:app_fintes/business_logic/data/accounts_data.dart';
 // pages/drawer.dart
-import 'package:app_fintes/business_logic/transaction_details.dart';
+import 'package:app_fintes/business_logic/models/account_model.dart';
+import 'package:app_fintes/business_logic/data_functions.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
 import 'package:app_fintes/widgets/drawer/drawer_navtile.dart';
 import 'package:app_fintes/widgets/drawer/setting_navtile.dart';

@@ -1,8 +1,8 @@
 // widgets/theme_config.dart
-import 'package:flutter/material.dart';import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 class CustomColors {
-  static const Color white = Color.fromRGBO(253, 255, 226, 1);
+  static const Color white = Color.fromRGBO(241, 252, 255, 1);
   static const Color black = Color.fromRGBO(26, 33, 48, 1);
   static const Color lightBlue = Color.fromRGBO(131, 180, 255, 1);
   static const Color darkBlue = Color.fromRGBO(90, 114, 160, 1);
@@ -46,5 +46,4 @@ ThemeData customThemeData = ThemeData(
           foregroundColor: CustomColors.white,
         ),
 
-        
       );

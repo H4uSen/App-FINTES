@@ -1,6 +1,6 @@
 // pages/acctmanagement_page.dart
 import 'package:app_fintes/widgets/acct_listtile.dart';
-import 'package:app_fintes/widgets/custom_button.dart';
+import 'package:app_fintes/widgets/form/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:app_fintes/widgets/theme_config.dart'; 
 import 'package:app_fintes/widgets/drawer/divider.dart';

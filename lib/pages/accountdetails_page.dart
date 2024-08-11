@@ -1,9 +1,12 @@
-import 'package:app_fintes/business_logic/transaction_details.dart';
+import 'package:app_fintes/business_logic/models/account_model.dart';
+import 'package:app_fintes/business_logic/data/registries_data.dart';
+import 'package:app_fintes/business_logic/data_functions.dart';
+import 'package:app_fintes/business_logic/models/registry_model.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
 import 'package:app_fintes/widgets/home/goal_card.dart';
 import 'package:app_fintes/widgets/home/recentactivity_tile.dart';
 import 'package:flutter/material.dart';
-import '../business_logic/dummy_data.dart';
+import '../business_logic/data/accounts_data.dart';
 
 class AccountDetailsPage extends StatelessWidget {
   const AccountDetailsPage({super.key});
@@ -13,7 +16,7 @@ class AccountDetailsPage extends StatelessWidget {
     Account account = ModalRoute.of(context)!.settings.arguments as Account;
     
     String accountType = ((account.accountType == AccountType.goal)?"Meta":(account.accountType == AccountType.account)?"cuenta":"Pagos").toLowerCase();
-    List<RegistryDetails> accountRegistries = registries.where((e) => e.account.accountName == account.accountName).toList();
+    List<Registry> accountRegistries = registries.where((e) => e.account.accountName == account.accountName).toList();
     double deposits = getAccountDeposits(registries, account.accountName);
     double withdrawals = getAccountWithdrawals(registries, account.accountName);
     double balance = deposits - withdrawals;

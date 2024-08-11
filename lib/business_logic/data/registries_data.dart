@@ -1,95 +1,57 @@
-import 'package:app_fintes/business_logic/transaction_details.dart';
+import 'package:app_fintes/business_logic/data/accounts_data.dart';
+import 'package:app_fintes/business_logic/models/registry_model.dart';
 
-List<RegistryDetails> getAccountRegistries(List<RegistryDetails> registries,String accountName) {
-    for(var registry in registries) {
-      (registry.account.accountName == accountName)?registries.add(registry):null;
-    }
-    return registries;
-  }
-
-
-List<Account> accounts = const [
-  Account(
-    accountId: '1',
-    accountName: 'Efectivo',
-    accountType: AccountType.account,
-  ),
-  Account(
-    accountId: '2',
-    accountName: 'Tarjeta',
-    accountType: AccountType.account,
-  ),
-  Account(
-    accountId: '3',
-    accountName: 'Ahorros',
-    accountType: AccountType.account,
-  ),
-  Account(
-    accountId: '4',
-    accountName: 'Carro',
-    accountType: AccountType.goal,
-    goalAmount: 200000,
-  ),
-  Account(
-    accountId: '5',
-    accountName: 'Telefono',
-    accountType: AccountType.goal,
-    goalAmount: 24000,
-  ),
-  Account(
-    accountId: '5',
-    accountName: 'Netflix',
-    accountType: AccountType.recurrentPayment,
-    recurrentAmount: 250,
-  ),
-
-];
-
-List<RegistryDetails> registries = [
-  RegistryDetails(
+List<Registry> registries = [
+  Registry(
     registryId: '1',
     title: 'Dinero recibido por x cosa',
     description: 'este es un ejemplo de una actividad reciente con una descripción larga, me gustaria ver como se ve y que se ajuste de manera correcta en la pantalla',
     account: accounts.firstWhere((e) => e.accountName == 'Ahorros'),
-    amount: 100000,
+    owner: '1',
+    amount:  100000.00,
     isDeposit: true,
   ),
-  RegistryDetails(
+  Registry(
     registryId: '2',
     title: 'Compra X Amazon',
     description: 'este es un ejemplo de una actividad reciente con una descripción larga, me gustaria ver como se ve y que se ajuste de manera correcta en la pantalla',
     account: accounts.firstWhere((e) => e.accountName == 'Tarjeta'),
-    amount: 500,
+    owner: '1',
+    amount: 500.12,
     isDeposit: false,
   ),
-  RegistryDetails(
+  Registry(
     registryId: '3',
     title: 'Dinero recibido por Y cosa',
     description: 'este es un ejemplo de una actividad reciente con una descripción larga, me gustaria ver como se ve y que se ajuste de manera correcta en la pantalla',
+    owner: '1',
     account: accounts.firstWhere((e) => e.accountName == 'Efectivo'),
-    amount: 100000,
+    amount: 100000.90,
     isDeposit: true,
   ),
-  RegistryDetails(
+  Registry(
     registryId: '4', 
     title: "Aporte para el carro", 
     description: "este es un ejemplo de una actividad reciente con una descripción larga, me gustaria ver como se ve y que se ajuste de manera correcta en la pantalla", 
+    owner: '1',
     account: accounts.firstWhere((e) => e.accountName == 'Carro'), 
-    amount: 12000, 
+    amount: 12000.00, 
     isDeposit: true
     ),
-  RegistryDetails(
+  Registry(
     registryId: '5', 
     title: 'Telefono', 
     description: 'Este es un ejemplo de', 
+    owner: '1',
     account: accounts.firstWhere((e) => e.accountName == 'Telefono'), 
     amount: 10000, 
     isDeposit: true),
-  RegistryDetails(
+  Registry(
     registryId: '6',
     title: 'Pago de Netflix',
     description: 'este es un ejemplo de una actividad reciente con una descripción larga, me gustaria ver como se ve y que se ajuste de manera correcta en la pantalla',
-    amount: 250,
+    amount: 250.59,
+    owner: '1',
     account: accounts.firstWhere((e) => e.accountName == 'Netflix'),
     isDeposit: false,
   )
