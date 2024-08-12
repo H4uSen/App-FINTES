@@ -1,3 +1,4 @@
+import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/business_logic/data_functions.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
@@ -22,14 +23,17 @@ class _InicioPageState extends State<InicioPage> {
 //TODO: Hay que hacer que la pantalla home se actualice cada vez que se agrega un nuevo registro por medio del boton flotante
   @override
   Widget build(BuildContext context) {
-  User user = ModalRoute.of(context)!.settings.arguments as User;
+  if(globalUser == null) {
+    Navigator.pushReplacementNamed(context, '/principal');
+  }
+  User user = globalUser!;
   List<Registry> allRegistries = getAllUserRegistries(user.id);
   List<Account> goalAccounts = getUserGoals(user.id);
 
     return Scaffold(
       drawer: const CustomDrawer(),
       appBar: AppBar(
-        title:  Text(
+        title:  const Text(
           'Inicio',
         ),
         centerTitle: true,

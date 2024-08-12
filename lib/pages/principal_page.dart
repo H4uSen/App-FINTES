@@ -1,6 +1,4 @@
-// pages/principal_page.dart
-//import 'package:app_fintes/pages/login_page.dart';
-//import 'package:app_fintes/pages/registro_page.dart';
+import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 

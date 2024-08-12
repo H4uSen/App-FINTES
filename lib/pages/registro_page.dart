@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:app_fintes/business_logic/user_functions.dart';
 import 'package:app_fintes/widgets/custom.dart';
+import 'package:app_fintes/widgets/theme_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class RegistroPage extends StatefulWidget {
@@ -46,6 +51,7 @@ class RegistroPageState extends State<RegistroPage> {
                     CustomForm(
                       label: 'Nombre',
                       hintText: 'Ingrese su nombre',
+                      maxLength: 30,
                       icon: const Icon(Icons.person),
                       controller: nombreController,
                       validator: (valor) {
@@ -58,25 +64,38 @@ class RegistroPageState extends State<RegistroPage> {
                         return null;
                       },
                     ),
+
                     const SizedBox(height: 25),
                     CustomForm(
                       controller: correoController,
                       label: 'Correo',
                       hintText: 'Ingrese su correo',
+                      maxLength: 30,
                       icon: const Icon(Icons.email),
                       validator: (valor) {
                         if (valor == null || valor.isEmpty) {
                           return 'El correo es obligatorio';
                         }
+                        if ("@".allMatches(valor,0).length > 1) return 'Ingrese un correo válido';
                         return null;
                       },
                     ),
                     const SizedBox(height: 25),
                     CustomForm(
+                      validator: (valor) {
+                        if (valor == null || valor.isEmpty) {
+                          return 'Ingrese una contraseña';
+                        }
+                        if (valor.length < 6) {
+                          return 'La contraseña debe tener al menos 6 caracteres';
+                        }
+                        return null;
+                      },
                       controller: contraseniaController,
                       label: 'Contraseña',
                       hintText: 'Ingrese una contraseña',
                       icon: const Icon(Icons.password),
+                      maxLength: 30,
                       obscureText: _obscureContrasenia, // Añadido
                       icon1: IconButton(
                         icon: Icon(
@@ -87,13 +106,24 @@ class RegistroPageState extends State<RegistroPage> {
                             _obscureContrasenia = !_obscureContrasenia;
                           });
                         },
+                        
                       ),
                     ),
                     const SizedBox(height: 25),
                     CustomForm(
+                      validator: (valor) {
+                        if (valor == null || valor.isEmpty) {
+                          return 'Confirme su contraseña';
+                        }
+                        if (valor != contraseniaController.text) {
+                          return 'Las contraseñas no coinciden';
+                        }
+                        return null;
+                      },
                       controller: confirmarcontraseniaController,
                       label: 'Confirmar Contraseña',
                       hintText: 'Confirme su contraseña',
+                      maxLength: 30,
                       icon: const Icon(Icons.password),
                       obscureText: _obscureConfirmarContrasenia, // Añadido
                       icon1: IconButton(
@@ -111,6 +141,32 @@ class RegistroPageState extends State<RegistroPage> {
                     ElevatedButton(
                       onPressed: () {
                         if (!formkey.currentState!.validate()) return;
+
+                        bool isregistered = register(
+                          nombreController.text,
+                          correoController.text,
+                          contraseniaController.text,
+                        );
+                        if(isregistered){
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: CustomColors.darkBlue,
+                              content: Text('Usuario registrado con éxito', style: Theme.of(context).textTheme.titleSmall),
+                              duration: const Duration(seconds: 3),
+                              
+                            ),
+                          );
+                          Navigator.pushReplacementNamed(context, '/principal');
+                          
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: CustomColors.lightBlue,
+                              content: Text('Este usuario ya existe', style: Theme.of(context).textTheme.titleSmall),
+                              duration:const Duration(seconds: 3),
+                            ),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),

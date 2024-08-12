@@ -74,7 +74,6 @@ class LoginPageState extends State<LoginPage> {
                       ),
                       validator: (valor){
                         if (valor == null || valor.isEmpty) return 'Ingrese su contraseña';
-                        if (valor.length < 8) return 'La contraseña debe tener al menos 8 caracteres';
                         
                         return null;
 
@@ -102,8 +101,9 @@ class LoginPageState extends State<LoginPage> {
                           );
                           return;
                         }
-                        globalUser = user;
-                        Navigator.pushReplacementNamed(context, '/home', arguments: user);
+                        //globalUser = user;
+                        if(globalUser == null) return;
+                        Navigator.pushReplacementNamed(context, '/home');
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),

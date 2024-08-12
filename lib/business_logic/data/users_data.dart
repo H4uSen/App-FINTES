@@ -1,6 +1,4 @@
-import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:app_fintes/business_logic/models/user_model.dart';
-
 
 List<User> users = [
   User(

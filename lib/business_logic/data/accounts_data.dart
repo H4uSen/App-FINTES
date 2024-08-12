@@ -1,6 +1,4 @@
 import 'package:app_fintes/business_logic/models/account_model.dart';
-import 'package:app_fintes/business_logic/models/registry_model.dart';
-
 
 List<Account> accounts = const [
   Account(
@@ -42,6 +40,7 @@ List<Account> accounts = const [
     accountType: AccountType.recurrentPayment,
     recurrentAmount: 250.00,
   ),
+
 
 ];
 

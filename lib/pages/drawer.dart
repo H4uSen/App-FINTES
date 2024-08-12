@@ -1,17 +1,24 @@
 import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:app_fintes/business_logic/data_functions.dart';
+import 'package:app_fintes/pages/principal_page.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
 import 'package:app_fintes/widgets/drawer/drawer_navtile.dart';
 import 'package:app_fintes/widgets/drawer/setting_navtile.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 
-class CustomDrawer extends StatelessWidget {
+class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
 
   @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
+  @override
   Widget build(BuildContext context) {
+
     List<Account> accounts = getUserAccounts(globalUser!.id);
     bool hasAccounts = accounts.isEmpty;
     List<Account> goals = getUserGoals(globalUser!.id);
@@ -67,12 +74,16 @@ class CustomDrawer extends StatelessWidget {
               children: [
 
                 DrawerNavTile(
+                  isSelected: 'Inicio' == getSelectedDrawerOption(),
                   title: 'Inicio', 
                   icon: Icons.home_rounded, 
                   iconBkgColor: CustomColors.white, 
                   onTap: (){
                     Navigator.pushNamed(context, '/home');
+                    setSelectedDrawerOption('Inicio');
+                    setState(() {});
                   },
+                  
                 ),
                 
 
@@ -81,10 +92,13 @@ class CustomDrawer extends StatelessWidget {
                 for (var account in accounts)
                   if (account.accountType == AccountType.account)
                     DrawerNavTile(
+                      isSelected: account.accountName == getSelectedDrawerOption(),
                       title: account.accountName, 
                       icon: Icons.attach_money_rounded, 
                       onTap: (){
                         Navigator.pushNamed(context, '/accountdetails', arguments: account);
+                        setSelectedDrawerOption(account.accountName);
+                        setState(() {});
                       }, 
                       iconBkgColor: CustomColors.green,
                     ),
@@ -102,10 +116,13 @@ class CustomDrawer extends StatelessWidget {
                 for (var account in goals)
                   if (account.accountType == AccountType.goal)
                     DrawerNavTile(
+                      isSelected: account.accountName == getSelectedDrawerOption(),
                       title: account.accountName, 
                       icon: Icons.flag_rounded, 
                       onTap: (){
                         Navigator.pushNamed(context, '/accountdetails', arguments: account);
+                        setSelectedDrawerOption(account.accountName);
+                        setState(() {});
                       }, 
                       iconBkgColor: CustomColors.yellow,
                     ),
@@ -122,12 +139,15 @@ class CustomDrawer extends StatelessWidget {
                 for (var account in recurrents)
                   if (account.accountType == AccountType.recurrentPayment)
                     DrawerNavTile(
+                      isSelected: account.accountName == getSelectedDrawerOption(),
                       title: account.accountName, 
                       icon: Icons.lock_clock,
                       subtitle: fixedCurrency(account.recurrentAmount!, "L."),
                       subColor: CustomColors.red,
                       onTap: (){
                         Navigator.pushNamed(context, '/accountdetails', arguments: account);
+                        setSelectedDrawerOption(account.accountName);
+                        setState(() {});
                       }, 
                       iconBkgColor: CustomColors.red,
                     ),
@@ -144,13 +164,15 @@ class CustomDrawer extends StatelessWidget {
           ),
       
           SettingNavtile(title: 'Gestionar cuenta',icon: Icons.settings, 
-          onTap: () => Navigator.pushReplacementNamed(context, '/accountmanagement'),
+          onTap: () => Navigator.pushNamed(context, '/accountmanagement'),
           ),
 
           SettingNavtile(
               title: 'Cerrar sesión', 
               icon: Icons.logout_outlined,
-              onTap: () => Navigator.pushReplacementNamed(context, '/principal'),
+              onTap: () => {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PrincipalPage())),
+                },
               ),
           
         ],
@@ -158,5 +180,12 @@ class CustomDrawer extends StatelessWidget {
       
     );
   }
+}
+
+void drawerSelectedControl(String accountSelected){
+  List<Account> accounts = getUserAccounts(globalUser!.id);
+  if(accounts.isEmpty) return;
+
+
 }
 

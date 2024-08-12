@@ -3,6 +3,7 @@ import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:app_fintes/business_logic/data/registries_data.dart';
 import 'package:app_fintes/business_logic/data_functions.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
+import 'package:app_fintes/pages/drawer.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
 import 'package:app_fintes/widgets/home/goal_card.dart';
 import 'package:app_fintes/widgets/home/recentactivity_tile.dart';
@@ -14,8 +15,11 @@ class AccountDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(globalUser == null) {
+    Navigator.pushReplacementNamed(context, '/principal');
+    }
+
     Account account = ModalRoute.of(context)!.settings.arguments as Account;
-    
     String accountType = ((account.accountType == AccountType.goal)?"Meta":(account.accountType == AccountType.account)?"Cuenta":"Pago");
     List<Registry> accountRegistries = getAccountRegistries(globalUser!.id, account.accountId);
     String row1, row2, row3;
@@ -44,6 +48,7 @@ class AccountDetailsPage extends StatelessWidget {
     }
     
     return Scaffold(
+      drawer: const CustomDrawer(),
       appBar: AppBar(
         title: Text(
           account.accountName,

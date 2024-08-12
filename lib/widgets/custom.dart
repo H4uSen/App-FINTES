@@ -11,10 +11,12 @@ class CustomForm extends StatelessWidget {
     required this.icon,
     this.icon1,
     this.validator,
-    this.obscureText = false, // Añadido
+    this.obscureText = false, 
+    this.maxLength, // Añadido
   });
 
   final String label;
+  final int? maxLength;
   final String hintText;
   final TextEditingController controller;
   final Icon? icon;
@@ -30,6 +32,7 @@ class CustomForm extends StatelessWidget {
       obscureText: obscureText,
       keyboardType: TextInputType.text,
       style: const TextStyle(fontSize: 18),
+      maxLength: maxLength,
       maxLines: 1,
       decoration: InputDecoration(
         hintText: hintText,

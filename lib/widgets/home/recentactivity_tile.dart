@@ -29,7 +29,6 @@ class RecentActivityTile extends StatelessWidget {
     return Card(
       elevation: 10,
       shape: RoundedRectangleBorder(
-        
         borderRadius: BorderRadius.circular(12.0),
         side: const BorderSide(
           color: CustomColors.darkBlue,

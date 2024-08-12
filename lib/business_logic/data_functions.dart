@@ -4,6 +4,15 @@ import 'package:app_fintes/business_logic/data/accounts_data.dart';
 import 'package:app_fintes/business_logic/data/registries_data.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
+
+String drawerOptionSelected = 'Inicio';
+String getSelectedDrawerOption() {
+  return drawerOptionSelected;
+}
+void setSelectedDrawerOption(String drawerOption) {
+  drawerOptionSelected = drawerOption;
+}
+
 //
 List<Account> getUserAccounts(String userId) {
   List<Account> userAccounts = [];

@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 class DrawerNavTile extends StatelessWidget {
   const DrawerNavTile({
     super.key, required this.title, required this.icon, required this.iconBkgColor, 
-    required this.onTap, this.subtitle, this.subColor, this.isDeposit
+    required this.onTap, this.subtitle, this.subColor, this.isDeposit,
+    this.isSelected = false,
   });
   final String? subtitle;
+  final bool isSelected;
   final String title;
   final IconData icon;
   final Color iconBkgColor;
@@ -20,6 +22,8 @@ class DrawerNavTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 50, top: 5, bottom: 5),
       child: ListTile(
+        selected: isSelected,
+        selectedTileColor: CustomColors.darkBlue,
         visualDensity: VisualDensity.compact,
         tileColor: CustomColors.white,
         shape: const RoundedRectangleBorder(
@@ -56,7 +60,5 @@ class DrawerNavTile extends StatelessWidget {
         onTap: onTap,
       ),
     );
-
-    
   }
 }
