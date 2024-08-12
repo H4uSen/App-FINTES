@@ -1,4 +1,5 @@
 
+import 'package:app_fintes/business_logic/models/user_model.dart';
 import 'package:app_fintes/pages/accountdetails_page.dart';
 import 'package:app_fintes/pages/acctmanagement_page.dart';
 import 'package:app_fintes/pages/home_page.dart';
@@ -8,6 +9,7 @@ import 'package:app_fintes/pages/registro_page.dart';
 import 'package:app_fintes/pages/registrydetails_page.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
+import 'package:app_fintes/business_logic/data/globals.dart';
 
 void main() {
   runApp(const MainApp());

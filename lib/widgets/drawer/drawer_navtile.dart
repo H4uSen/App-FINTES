@@ -44,7 +44,7 @@ class DrawerNavTile extends StatelessWidget {
               children:[
                 Text(subtitle!, 
                   style: TextStyle(
-                    fontSize: 15, 
+                    fontSize: 18, 
                     color: (subColor != null)? subColor: (subColor == null && isDeposit == null)? CustomColors.black: (isDeposit == true)? CustomColors.green: CustomColors.red,
                     ),),],)
             :null,

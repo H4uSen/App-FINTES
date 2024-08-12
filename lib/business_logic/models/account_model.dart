@@ -18,10 +18,10 @@ class Account {
   final bool? isDeposit;
   final double? goalAmount;
 
-  final String owner;
+  final String ownerId;
 
   const Account({
-    required this.owner,
+    required this.ownerId,
     required this.accountId,
     required this.accountName,
     required this.accountType,
@@ -30,6 +30,5 @@ class Account {
     this.isDeposit, 
     this.goalAmount, 
   });
-
-  getGoalCollected(List<Registry> goalsRegistries, String accountName) {}
+  
 }

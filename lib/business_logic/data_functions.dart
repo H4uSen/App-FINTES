@@ -1,63 +1,85 @@
 
 
+import 'package:app_fintes/business_logic/data/accounts_data.dart';
+import 'package:app_fintes/business_logic/data/registries_data.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
-
-List<Account> getUserAccounts(List<Account> accounts, String userId) {
+//
+List<Account> getUserAccounts(String userId) {
   List<Account> userAccounts = [];
   for(var account in accounts) {
-    (account.owner == userId && account.accountType == AccountType.account)?userAccounts.add(account):null;
+    (account.ownerId == userId && account.accountType == AccountType.account)?userAccounts.add(account):null;
   }
   return userAccounts;
 }
-
-List<Account> getAccountGoals(List<Account> accounts) {
+//
+List<Account> getUserGoals(String userId) {
   List<Account> goals = [];
   for(var account in accounts) {
-    (account.accountType == AccountType.goal)?goals.add(account):null;
+    (account.accountType == AccountType.goal && account.ownerId == userId)?goals.add(account):null;
   }
   return goals;
 }
-
-List<Account> getAccountRecurrents(List<Account> accounts) {
-  List<Account> savings = [];
+//
+List<Account> getUserRecurrents(String userId) {
+  List<Account> recurrents = [];
   for(var account in accounts) {
-    (account.accountType == AccountType.recurrentPayment)?savings.add(account):null;
+    (account.accountType == AccountType.recurrentPayment && account.ownerId == userId)?recurrents.add(account):null;
   }
-  return savings;
+  return recurrents;
 }
-
-List<Registry> getAccountRegistries(List<Registry> registries, String accountName) {
+//
+List<Registry> getAccountRegistries(String userId, String accountId) {
   List<Registry> accountRegistries = [];
   for(var registry in registries) {
-    (registry.account.accountName == accountName)?accountRegistries.add(registry):null;
+    (userId == registry.ownerId &&registry.accountId == accountId)?accountRegistries.add(registry):null;
   }
   return accountRegistries;
 }
+//
+List<Registry> getAllUserRegistries(String userId) {
+  List<Registry> userRegistries = [];
+  for(var registry in registries) {
+    (registry.ownerId == userId)?userRegistries.add(registry):null;
+  }
+  return userRegistries;
+}
 
-
-
-double getAccountCollected(List<Registry> goalRegistries, String goalAccountName) {
+//
+double getAccountCollected(String userId, String accountId) {
   double collected = 0;
-  for(var goal in goalRegistries) {
-    (goal.account.accountName == goalAccountName)?collected += goal.amount:null;
+  List<Registry> accountRegistries = getAccountRegistries(userId, accountId);
+  for(var goal in accountRegistries) {
+    (goal.accountId == accountId)?collected += ((goal.isDeposit)?goal.amount:goal.amount*-1):null;
   }
   return collected;
 }
-
-double getAccountDeposits(List<Registry> accountRegistries, String accountName) {
+//
+double getAccountDeposits(String userId, String accountId) {
   double deposits = 0;
+  List<Registry> accountRegistries = getAccountRegistries(userId, accountId);
   for(var account in accountRegistries) {
-    (account.account.accountName == accountName && account.isDeposit)?deposits += account.amount:null;
+    (account.accountId == accountId && account.isDeposit)?deposits += account.amount:null;
   }
   return deposits;
 }
-double getAccountWithdrawals(List<Registry> accountRegistries, String accountName) {
+//
+double getAccountWithdrawals(String userId, String accountId) {
   double withdrawals = 0;
+  List<Registry> accountRegistries = getAccountRegistries(userId, accountId);
   for(var account in accountRegistries) {
-    (account.account.accountName == accountName && !account.isDeposit)?withdrawals += account.amount:null;
+    (account.accountId == accountId && !account.isDeposit)?withdrawals += account.amount:null;
   }
   return withdrawals;
+}
+
+String? getAccountNameById(String accountId) {
+  for(var account in accounts) {
+    if(account.accountId == accountId) {
+      return account.accountName;
+    }
+  }
+  return null;
 }
 
 String transactionSymbol (bool isDeposit) {
@@ -65,7 +87,7 @@ String transactionSymbol (bool isDeposit) {
 }
 
 String fixedCurrency ( double amount, [String? currency]) {
-  if(currency == null) {
+  if(currency == null || currency.isEmpty) {
     return amount.toStringAsFixed(2);
   }else {
     return '$currency ${amount.toStringAsFixed(2)}';

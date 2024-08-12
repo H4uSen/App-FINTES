@@ -1,4 +1,5 @@
 // widgets/custom.dart
+import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 
 class CustomForm extends StatelessWidget {
@@ -35,7 +36,7 @@ class CustomForm extends StatelessWidget {
         labelText: label,
         prefixIcon: icon,
         suffixIcon: icon1,
-        border: const OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
+        border: const OutlineInputBorder(borderSide: BorderSide(color: CustomColors.black)),
         labelStyle: const TextStyle(fontSize: 18),
         hintStyle: const TextStyle(fontSize: 18),
         errorText: null,

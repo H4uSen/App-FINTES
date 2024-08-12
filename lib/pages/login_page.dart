@@ -1,5 +1,9 @@
 // pages/login_page.dart
+import 'package:app_fintes/business_logic/data/globals.dart';
+import 'package:app_fintes/business_logic/models/user_model.dart';
+import 'package:app_fintes/business_logic/user_functions.dart';
 import 'package:app_fintes/widgets/custom.dart';
+import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -28,7 +32,7 @@ class LoginPageState extends State<LoginPage> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: const Color.fromRGBO(131, 180, 255, 1),
+        backgroundColor: CustomColors.lightBlue,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -46,10 +50,9 @@ class LoginPageState extends State<LoginPage> {
                       hintText: 'Ingrese su correo',
                       icon: const Icon(Icons.email),
                       validator: (valor) {
-                      /*  if (valor == null || valor.isEmpty) {
-                          return 'El correo es obligatorio';
-                        }
-                      */  return null;
+                        if (valor == null || valor.isEmpty) return 'Ingrese su correo';
+                        if ("@".allMatches(valor,0).length > 1) return 'Ingrese un correo válido';
+                        return null;
                       },
                     ),
                     const SizedBox(height: 25),
@@ -69,17 +72,42 @@ class LoginPageState extends State<LoginPage> {
                           });
                         },
                       ),
+                      validator: (valor){
+                        if (valor == null || valor.isEmpty) return 'Ingrese su contraseña';
+                        if (valor.length < 8) return 'La contraseña debe tener al menos 8 caracteres';
+                        
+                        return null;
+
+                      },
                     ),
                     const SizedBox(height: 25),
                     ElevatedButton(
                       onPressed: () {
                         if (!formkey.currentState!.validate()) return;
-                        
-                      Navigator.pushNamed(context, '/home');
+                        User? user = login(correoController.text, contraseniaController.text);
+                        if (user == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(10),
+                                    child: Icon(Icons.error,size: 40,),
+                                  ),
+                                  Text('Correo o contraseña incorrecta',overflow: TextOverflow.ellipsis,maxLines: 2,),
+                                ],
+                              ),
+                              backgroundColor: CustomColors.red,
+                            ),
+                          );
+                          return;
+                        }
+                        globalUser = user;
+                        Navigator.pushReplacementNamed(context, '/home', arguments: user);
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-                        backgroundColor: const Color.fromRGBO(131, 180, 255, 1),
+                        backgroundColor: CustomColors.lightBlue,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -88,10 +116,11 @@ class LoginPageState extends State<LoginPage> {
                         'Continuar'.toUpperCase(),
                         style: const TextStyle(
                           fontSize: 22,
-                          color: Colors.black,
+                          color: CustomColors.black,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      
                     ),
                   ],
                 ),

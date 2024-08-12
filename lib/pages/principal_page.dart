@@ -1,6 +1,7 @@
 // pages/principal_page.dart
 //import 'package:app_fintes/pages/login_page.dart';
 //import 'package:app_fintes/pages/registro_page.dart';
+import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 
 
@@ -46,8 +47,8 @@ class PrincipalPage extends StatelessWidget {
                       },
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 55, vertical: 10),
-                        backgroundColor: Colors.white, 
-                        side: const BorderSide(color: Colors.black, width: 2), 
+                        backgroundColor: CustomColors.white, 
+                        side: const BorderSide(color: CustomColors.black, width: 2), 
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
@@ -55,7 +56,7 @@ class PrincipalPage extends StatelessWidget {
                       child:  Text(
                         'Iniciar Sesión'.toUpperCase(),
                         style: const TextStyle(
-                          color: Colors.black,
+                          color: CustomColors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 25,
                         ),
@@ -68,8 +69,8 @@ class PrincipalPage extends StatelessWidget {
                       },
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 65, vertical: 10),
-                        backgroundColor: Colors.black, 
-                        side: const BorderSide(color: Colors.black, width: 2), 
+                        backgroundColor: CustomColors.black, 
+                        side: const BorderSide(color: CustomColors.black, width: 2), 
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),

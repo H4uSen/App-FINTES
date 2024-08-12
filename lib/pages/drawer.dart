@@ -1,5 +1,4 @@
-import 'package:app_fintes/business_logic/data/accounts_data.dart';
-// pages/drawer.dart
+import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:app_fintes/business_logic/data_functions.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
@@ -13,6 +12,13 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Account> accounts = getUserAccounts(globalUser!.id);
+    bool hasAccounts = accounts.isEmpty;
+    List<Account> goals = getUserGoals(globalUser!.id);
+    bool hasGoals = goals.isEmpty;
+    List<Account> recurrents = getUserRecurrents(globalUser!.id);
+    bool hasRecurrents = recurrents.isEmpty;
+
     return Drawer(
       backgroundColor: CustomColors.lightBlue,
       child: Column(
@@ -37,16 +43,15 @@ class CustomDrawer extends StatelessWidget {
                   ),
                 ),
                 
-                const Padding(
-                  padding: EdgeInsets.all(10.0),
+                Padding(
+                  padding:const EdgeInsets.all(10.0),
                   child: SizedBox(
-                    //TODO: Hacer que agarre el primer nombre del usuario solamente
                     width: 150,
                     child: Text(
-                      'Ermenegildo lopez',
+                      globalUser!.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: CustomColors.black,
                         fontSize: 24,
                       ),
@@ -83,11 +88,18 @@ class CustomDrawer extends StatelessWidget {
                       }, 
                       iconBkgColor: CustomColors.green,
                     ),
-                const CustomDivider(title: 'Vacío', showLines: false),
+
+                Visibility(
+                  visible: hasAccounts,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: CustomDivider(title: 'Vacío', showLines: false),
+                  ),
+                ),
 
 
                 const CustomDivider(title: 'Metas'),
-                for (var account in accounts)
+                for (var account in goals)
                   if (account.accountType == AccountType.goal)
                     DrawerNavTile(
                       title: account.accountName, 
@@ -97,11 +109,17 @@ class CustomDrawer extends StatelessWidget {
                       }, 
                       iconBkgColor: CustomColors.yellow,
                     ),
-                const CustomDivider(title: 'Vacío', showLines: false),
+                Visibility(
+                  visible: hasGoals,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: CustomDivider(title: 'Vacío', showLines: false),
+                  ),
+                ),
 
 
                 const CustomDivider(title: 'Pagos recurrentes'),
-                for (var account in accounts)
+                for (var account in recurrents)
                   if (account.accountType == AccountType.recurrentPayment)
                     DrawerNavTile(
                       title: account.accountName, 
@@ -113,7 +131,13 @@ class CustomDrawer extends StatelessWidget {
                       }, 
                       iconBkgColor: CustomColors.red,
                     ),
-                const CustomDivider(title: 'Vacío', showLines: false),
+                Visibility(
+                  visible: hasRecurrents,
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: CustomDivider(title: 'Vacío', showLines: false),
+                  ),
+                ),
                 
               ],
             ),

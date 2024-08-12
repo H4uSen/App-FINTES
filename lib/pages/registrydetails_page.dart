@@ -1,3 +1,6 @@
+import 'package:app_fintes/business_logic/data/globals.dart';
+import 'package:app_fintes/business_logic/data_functions.dart';
+import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
 import 'package:app_fintes/widgets/form/custom_dopdown.dart';
 import 'package:app_fintes/widgets/form/custom_textformfield.dart';
@@ -17,8 +20,15 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Registry registry = ModalRoute.of(context)!.settings.arguments as Registry;
-    
+    Registry registry = ModalRoute.of(context)!.settings.arguments as Registry;
+    List<Account> accounts = getUserAccounts(globalUser!.id);
+    List<DropdownMenuItem<String>> options = [
+      for (Account account in accounts)
+        DropdownMenuItem<String>(
+          value: account.accountId,
+          child: Text(account.accountName),
+        )
+    ];
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -32,7 +42,6 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
           icon: const Icon(Icons.arrow_back),
         ),
         actions: [
-          
           TextButton(
             style: ButtonStyle(
               backgroundColor: WidgetStateProperty.all<Color>((isEditable)?CustomColors.darkBlue: CustomColors.lightBlue),
@@ -95,9 +104,10 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
             CustomDropDown(
               isEditable: isEditable,
               labeltext: 'Cuenta',
-              options: [
-
-              ],
+              options: options,
+              onChanged: (String? newValue) {
+                registry.accountId = newValue!;
+              },
               ),
 
 
@@ -114,7 +124,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                       DropdownButton<String>(
                         isExpanded: true,
                         value: 'Efectivo',
-                        items: <String>['Efectivo', 'Tarjetaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'Banco']
+                        items: <String>['Efectivo', 'Tarjeta', 'Banco']
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -148,7 +158,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                           );
                         }).toList(),
                         onChanged: (String? newValue) {
-                          // Add your onChanged logic here
+                          registry.accountId = newValue!;
                         },
                       ),
                     ],

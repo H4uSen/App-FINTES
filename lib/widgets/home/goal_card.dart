@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 class GoalCard extends StatefulWidget {
   const GoalCard({super.key, required this.title, 
     this.showLeadingButton = true, this.onTap, required this.row1, required this.row2, 
-    required this.row3, required this.money1, required this.money2, required this.money3, });
+    required this.row3, required this.money1, required this.money2, required this.money3, 
+    this.currency1 = true, this.currency2 = true, this.currency3 = true, });
 
   final String title;
   final String row1, row2, row3;
   final double money1, money2, money3;
+  final bool currency1, currency2, currency3;
   final bool showLeadingButton;
   final void Function()? onTap;
 
@@ -59,9 +61,9 @@ class _GoalCardState extends State<GoalCard> {
                   child: Column(
                     children: [
                       const SizedBox(height: 10.0),
-                      GoalCardRow(title: widget.row1, amount: widget.money1, ),
-                      GoalCardRow(title: widget.row2, amount: widget.money2),
-                      GoalCardRow(title: widget.row3, amount: widget.money3, bkgColor: CustomColors.lightBlue,),
+                      GoalCardRow(title: widget.row1, amount: widget.money1,showCurrency: widget.currency1,),
+                      GoalCardRow(title: widget.row2, amount: widget.money2,showCurrency: widget.currency2,),
+                      GoalCardRow(title: widget.row3, amount: widget.money3,showCurrency: widget.currency3, bkgColor: CustomColors.lightBlue,),
                       
                       if(widget.showLeadingButton)
                       ListTile(
@@ -88,12 +90,14 @@ class GoalCardRow extends StatelessWidget {
     super.key,
     required this.title,
     required this.amount,
+    this.showCurrency = true,
     this.bkgColor = Colors.transparent,
   });
 
   final String title;
   final double amount;
   final Color bkgColor;
+  final bool showCurrency;
   
   @override
   Widget build(BuildContext context) {
@@ -109,7 +113,7 @@ class GoalCardRow extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title, style: descriptionStyle,),
-            Text(fixedCurrency(amount, 'L.'), style: descriptionStyle,),
+            Text(fixedCurrency(amount, (showCurrency)?'L.':""), style: descriptionStyle,),
           ],
         ),
       ),

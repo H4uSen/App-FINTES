@@ -1,3 +1,4 @@
+import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:app_fintes/business_logic/data/registries_data.dart';
 import 'package:app_fintes/business_logic/data_functions.dart';
@@ -15,11 +16,32 @@ class AccountDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Account account = ModalRoute.of(context)!.settings.arguments as Account;
     
-    String accountType = ((account.accountType == AccountType.goal)?"Meta":(account.accountType == AccountType.account)?"cuenta":"Pagos").toLowerCase();
-    List<Registry> accountRegistries = registries.where((e) => e.account.accountName == account.accountName).toList();
-    double deposits = getAccountDeposits(registries, account.accountName);
-    double withdrawals = getAccountWithdrawals(registries, account.accountName);
+    String accountType = ((account.accountType == AccountType.goal)?"Meta":(account.accountType == AccountType.account)?"Cuenta":"Pago");
+    List<Registry> accountRegistries = getAccountRegistries(globalUser!.id, account.accountId);
+    String row1, row2, row3;
+    if(AccountType.goal == account.accountType){
+      row1 = 'Objetivo:';
+      row2 = 'Reunido:';
+      row3 = 'Restante:';
+    } else if (AccountType.account == account.accountType){
+      row1 = 'Depositos:';
+      row2 = 'Retiros:';
+      row3 = 'Saldo:';
+    } else {
+      row1 = 'Pago:';
+      row2 = 'Pagos realizados:';
+      row3 = 'Total pagado:';
+    }
+    
+    double deposits = getAccountDeposits(globalUser!.id, account.accountId);
+    double withdrawals = getAccountWithdrawals(globalUser!.id, account.accountId);
     double balance = deposits - withdrawals;
+
+    if(account.accountType == AccountType.recurrentPayment){
+      deposits = account.recurrentAmount!;
+      withdrawals = getAccountRegistries(globalUser!.id, account.accountId).length*1.00;
+      balance = getAccountWithdrawals(globalUser!.id , account.accountId);
+    }
     
     return Scaffold(
       appBar: AppBar(
@@ -32,12 +54,13 @@ class AccountDetailsPage extends StatelessWidget {
         children: [
           GoalCard(
             title: "Resumen de $accountType", 
-            row1: 'Ingresos:',
-            row2: 'Egresos:',
-            row3: 'Saldo:',
+            row1: row1,
+            row2: row2,
+            row3: row3,
             money1: deposits,
             money2: withdrawals,
             money3: balance,
+            currency2: (account.accountType == AccountType.recurrentPayment)?false:true,
             showLeadingButton: false,
             ),
 
