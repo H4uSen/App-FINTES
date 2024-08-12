@@ -40,6 +40,11 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
       ),
     ];
 
+    TextEditingController titleController = TextEditingController(text: registry.title);
+    TextEditingController descriptionController = TextEditingController();
+    TextEditingController amountController = TextEditingController(text: registry.amount.toString());
+
+
 
     return Scaffold(
       appBar: AppBar(
@@ -89,17 +94,23 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
           children: [
 
             CustomTextFormField(
-              initialValue: registry.title, 
+              initialValue: registry.title,
+              //controller: titleController,
               labelText: "Título", 
               isEditable: isEditable,
               maxLength: 50,
               maxLines: 3,
               validator: (v)=>(v!.isEmpty)?'Este campo es requerido':null,
+              onChanged: (v){
+                titleController.text = v;
+                print("Esto vienen del onvhanged: "+titleController.text);
+              },
             ),
 
             CustomTextFormField(
               initialValue: "",
               labelText: "Descripción", 
+              //controller: descriptionController,
               isEditable: isEditable,
               maxLength: 90,
               maxLines: 3,
@@ -108,6 +119,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
             CustomTextFormField(
               initialValue: registry.amount.toString(),
               labelText: "Cantidad", 
+              //controller: amountController,
               isEditable: isEditable,
               textAlignment: TextAlign.end,              
               prefixText: 'L. ',
@@ -189,6 +201,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       // Add your save functionality here
+                      print("Esto viene del guardar: "+titleController.text);
                     }
                   },
                 ),

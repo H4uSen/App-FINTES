@@ -14,14 +14,14 @@ class CustomTextFormField extends StatefulWidget {
     this.textAlignment = TextAlign.start,
     this.maxLength = 50,
     this.minLines = 1,
-    this.maxLines = 1, 
+    this.maxLines = 1, this.onChanged, 
   });
   final TextInputType keyboardType;
   final TextAlign textAlignment;
   final Widget? prefixIcon;
   final String? prefixText;
 
-  
+  final void Function(String)? onChanged;
   final String? Function(String?)? validator;
   final String initialValue;
   final String labelText;
@@ -76,10 +76,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           enabled: widget.isEditable,
         ),
         validator: widget.validator,
-        onChanged: (value){
-          //_controller
-
-        },
+        onChanged: widget.onChanged,
       ),
     );
   }
