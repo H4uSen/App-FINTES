@@ -10,7 +10,7 @@ List<Registry> registries = [
     ownerId: '1',
     amount:  100000.00,
     isDeposit: true,
-    date: DateTime.now().subtract(Duration(days: 1)),
+    date: "10/02/2021",
   ),
   Registry(
     registryId: '2',
@@ -20,7 +20,7 @@ List<Registry> registries = [
     ownerId: '1',
     amount: 500.12,
     isDeposit: false,
-    date: DateTime.now().subtract(Duration(days: 2)),
+    date: "11/02/2021",
   ),
   Registry(
     registryId: '3',
@@ -30,7 +30,7 @@ List<Registry> registries = [
     accountId: "1",
     amount: 100000.90,
     isDeposit: true,
-    date: DateTime.now().subtract(Duration(days: 3)),
+    date: "12/02/2020",
   ),
   Registry(
     registryId: '4', 
@@ -40,7 +40,7 @@ List<Registry> registries = [
     accountId: "4", 
     amount: 12000.00, 
     isDeposit: true,
-    date: DateTime.now().subtract(Duration(days: 4)),
+    date: "13/02/2020",
   ),
   Registry(
     registryId: '5', 
@@ -50,7 +50,7 @@ List<Registry> registries = [
     accountId: '5', 
     amount: 10000, 
     isDeposit: true,
-    date: DateTime.now().subtract(Duration(days: 5)),
+    date: "14/02/2020",
     ),
   Registry(
     registryId: '6',
@@ -60,6 +60,6 @@ List<Registry> registries = [
     ownerId: '1',
     accountId: '6',
     isDeposit: false,
-    date: DateTime.now().subtract(Duration(days: 6)),
+    date: "15/02/2020",
   )
 ];

@@ -8,29 +8,33 @@ class CustomDropDown extends StatelessWidget {
   const CustomDropDown({
     super.key,
     required this.isEditable, required this.labeltext, required this.options,
-    this.onChanged,
+    this.onChanged, required this.value,
   });
 
   final bool isEditable;
   final String labeltext;
+  final String value;
   final void Function(String?)? onChanged;
   final List<DropdownMenuItem<String>> options;
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<String>(
-      
-      decoration: InputDecoration(
-        labelText: labeltext,
-        labelStyle: Theme.of(context).textTheme.bodyLarge!.apply(fontWeightDelta: 2),
-        
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: DropdownButtonFormField<String>(
+        iconSize: 40,
+        decoration: InputDecoration(
+          labelText: labeltext,
+          labelStyle: Theme.of(context).textTheme.bodyLarge!.apply(fontWeightDelta: 2),
+          
+        ),
+        itemHeight: 70,
+        style: Theme.of(context).textTheme.bodyLarge!.apply(color: CustomColors.black),
+        isExpanded: true,
+        value: value,
+        items: options,
+        onChanged: (isEditable)?onChanged:null,
       ),
-      itemHeight: 50,
-      style: Theme.of(context).textTheme.bodyMedium!.apply(color: CustomColors.black),
-      isExpanded: true,
-      value: (options.isNotEmpty)?options[0].value:"",
-      items: options,
-      onChanged: (isEditable)?onChanged:null,
     );
   }
 }

@@ -1,4 +1,3 @@
-import 'package:app_fintes/business_logic/models/account_model.dart';
 class Registry {
   final String registryId;
   final String title;
@@ -7,7 +6,7 @@ class Registry {
   final String ownerId;
   final double amount;
   final bool isDeposit;
-  final DateTime date;
+  final String date;
 
   Registry({
     required this.ownerId,

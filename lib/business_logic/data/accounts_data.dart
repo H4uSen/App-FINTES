@@ -40,7 +40,5 @@ List<Account> accounts = const [
     accountType: AccountType.recurrentPayment,
     recurrentAmount: 250.00,
   ),
-
-
 ];
 

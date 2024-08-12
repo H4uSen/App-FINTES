@@ -43,7 +43,7 @@ class _InicioPageState extends State<InicioPage> {
         children: [
           const CustomDivider(title: 'Resumen de metas'),
           SizedBox(
-            height: 250,
+            height: 300,
             child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: goalAccounts.length,

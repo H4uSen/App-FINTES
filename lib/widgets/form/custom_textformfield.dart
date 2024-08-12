@@ -21,6 +21,7 @@ class CustomTextFormField extends StatefulWidget {
   final Widget? prefixIcon;
   final String? prefixText;
 
+  
   final String? Function(String?)? validator;
   final String initialValue;
   final String labelText;
@@ -35,17 +36,17 @@ class CustomTextFormField extends StatefulWidget {
 }
 
 class _CustomTextFormFieldState extends State<CustomTextFormField> {
-  late final TextEditingController controller;
+  late final TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController(text: (widget.initialValue.isEmpty)?'Sin ${widget.labelText.toLowerCase()}':widget.initialValue);
+    _controller = TextEditingController(text: (widget.initialValue.isEmpty)?'Sin ${widget.labelText.toLowerCase()}':widget.initialValue);
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -57,7 +58,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     return Padding(
       padding: const EdgeInsets.symmetric( vertical: 10),
       child: TextFormField(
-        controller: controller,
+        controller: _controller,
         minLines: widget.minLines,
         maxLines: widget.maxLines,
         maxLength: widget.maxLength,
@@ -75,6 +76,10 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
           enabled: widget.isEditable,
         ),
         validator: widget.validator,
+        onChanged: (value){
+          //_controller
+
+        },
       ),
     );
   }

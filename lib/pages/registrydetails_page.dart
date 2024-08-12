@@ -22,13 +22,25 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
   Widget build(BuildContext context) {
     Registry registry = ModalRoute.of(context)!.settings.arguments as Registry;
     List<Account> accounts = getUserAccounts(globalUser!.id);
-    List<DropdownMenuItem<String>> options = [
+    List<DropdownMenuItem<String>> accountOptions = [
       for (Account account in accounts)
         DropdownMenuItem<String>(
           value: account.accountId,
           child: Text(account.accountName),
         )
     ];
+    List<DropdownMenuItem<String>> resgistryTypeOpts = const [
+      DropdownMenuItem<String>(
+        value: 'Ingreso',
+        child: Text('Ingreso'),
+      ),
+      DropdownMenuItem<String>(
+        value: 'Egreso',
+        child: Text('Egreso'),
+      ),
+    ];
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -48,6 +60,8 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
             ),
             onPressed: (){
               isEditable = !isEditable;
+              
+              if(!isEditable) Navigator.popAndPushNamed(context, '/registrydetails', arguments: registry);
               setState(() {});
             }, 
             child: Row(
@@ -99,93 +113,51 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
               prefixText: 'L. ',
               keyboardType: TextInputType.number,
               maxLength: 16,
+              validator: (val){
+                if(val!.isEmpty) return 'Este campo es requerido';
+                if(double.tryParse(val) == null) return 'Ingrese un número válido';
+                if(double.parse(val) <= 0) return 'Ingrese un número mayor a 0';
+                return null;
+              },
             ),
 
             CustomDropDown(
               isEditable: isEditable,
-              labeltext: 'Cuenta',
-              options: options,
+              labeltext: 'Cuenta:',
+              value: registry.accountId,
+              options: accountOptions,
               onChanged: (String? newValue) {
-                registry.accountId = newValue!;
-              },
+                },
               ),
 
+            CustomDropDown(
+              isEditable: isEditable,
+              labeltext: 'Tipo:',
+              value: (registry.isDeposit)?'Ingreso':'Egreso',
+              options: resgistryTypeOpts,
+              onChanged: (String? newValue) {
+                print(newValue);
+              },
+            ),
 
-            Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Cuenta:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      DropdownButton<String>(
-                        isExpanded: true,
-                        value: 'Efectivo',
-                        items: <String>['Efectivo', 'Tarjeta', 'Banco']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          // Add your onChanged logic here
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Tipo:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      DropdownButton<String>(
-                        isExpanded: true,
-                        value: 'Ingreso',
-                        items: <String>['Ingreso', 'Egreso']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          registry.accountId = newValue!;
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Fecha de registro:',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            const SizedBox(height: 6),
+            const Text(
+              'Fecha de creación:',
+              style: TextStyle(fontWeight: FontWeight.bold,color: CustomColors.black),
             ),
             Text(
-              '28/7/2024',
-              style: TextStyle(fontSize: 16),
+              registry.date,
+              style: Theme.of(context).textTheme.bodyMedium!.apply(color: CustomColors.black),
             ),
-            
+            const SizedBox(height: 50),
+
             
             
             Visibility(
               visible: !isEditable,
               child: Center(
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    // Add your delete functionality here
-                  },
-                  icon: Icon(Icons.delete, color: CustomColors.white,size: 30,),
+                  icon: const Icon(Icons.delete, color: CustomColors.white,size: 30,),
                   label: Text('Eliminar', style: Theme.of(context).textTheme.bodyLarge!.apply(color: CustomColors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: CustomColors.black,
@@ -194,6 +166,9 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
+                  onPressed: () {
+                    // Add your delete functionality here
+                  },
                 ),
               ),
             ),
@@ -202,11 +177,6 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
               visible: isEditable,
               child: Center(
                 child: ElevatedButton.icon(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Add your save functionality here
-                    }
-                  },
                   icon: Icon(Icons.save, color: CustomColors.white,size: 30,),
                   label: Text('Guardar', style: Theme.of(context).textTheme.bodyLarge!.apply(color: CustomColors.white)),
                   style: ElevatedButton.styleFrom(
@@ -216,6 +186,11 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      // Add your save functionality here
+                    }
+                  },
                 ),
               ),
             ),
