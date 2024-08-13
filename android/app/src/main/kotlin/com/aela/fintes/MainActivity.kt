@@ -1,4 +1,4 @@
-package com.example.app_fintes
+package com.aela.fintes
 
 import io.flutter.embedding.android.FlutterActivity
 
