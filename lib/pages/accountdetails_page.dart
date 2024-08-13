@@ -8,7 +8,6 @@ import 'package:app_fintes/widgets/drawer/divider.dart';
 import 'package:app_fintes/widgets/home/goal_card.dart';
 import 'package:app_fintes/widgets/home/recentactivity_tile.dart';
 import 'package:flutter/material.dart';
-import '../business_logic/data/accounts_data.dart';
 
 class AccountDetailsPage extends StatelessWidget {
   const AccountDetailsPage({super.key});
@@ -74,13 +73,14 @@ class AccountDetailsPage extends StatelessWidget {
               child: ListView.builder(
                 itemCount: accountRegistries.length,
                 itemBuilder: (context, index) {
+                  String? accountName = getAccountNameById(accountRegistries[index].accountId);
                   return RecentActivityTile(
-                    account: accountType,
+                    account: accountName!,
                     title: accountRegistries[index].title,
                     description: accountRegistries[index].description,
                     amount: accountRegistries[index].amount,
                     isDeposit: accountRegistries[index].isDeposit,
-                    
+                    onTap: () => Navigator.pushNamed(context, '/registrydetails', arguments: accountRegistries[index])
                   );
                 },
               ),

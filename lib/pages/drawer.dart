@@ -172,6 +172,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
               icon: Icons.logout_outlined,
               onTap: () => {
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const PrincipalPage())),
+                  globalUser = null,
+                  
                 },
               ),
           

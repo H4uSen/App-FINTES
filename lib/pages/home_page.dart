@@ -42,8 +42,12 @@ class _InicioPageState extends State<InicioPage> {
       body: Column(
         children: [
           const CustomDivider(title: 'Resumen de metas'),
+          Visibility(
+            visible: goalAccounts.isEmpty,
+            child: const CustomDivider(title: "Vacío", showLines: false),
+            ),
           SizedBox(
-            height: 300,
+            height: 280,
             child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: goalAccounts.length,
@@ -74,26 +78,29 @@ class _InicioPageState extends State<InicioPage> {
           
 
           const CustomDivider(title: 'Actividades recientes'),
+          Visibility(
+            visible: allRegistries.isEmpty,
+            child: const CustomDivider(title: "Vacío", showLines: false),
+            ),
           Expanded(
             child: ListView.builder(
-                  
-                  itemCount: allRegistries.length,
-                  itemBuilder: (context, index) {
-                      String? accountName = getAccountNameById(allRegistries[index].accountId);
-                      return RecentActivityTile(
-                      title: allRegistries[index].title,
-                      description: allRegistries[index].description,
-                      account: accountName ?? 'No se encontro la cuenta',  
-                      amount: allRegistries[index].amount,
-                      isDeposit: allRegistries[index].isDeposit,
-                      onTap: (){
-                        Navigator.pushNamed(context, '/registrydetails', arguments: allRegistries[index]);
-                      },
-                    );
-                    
-                  },
-                ),
+            itemCount: allRegistries.length,
+            itemBuilder: (context, index) {
+                String? accountName = getAccountNameById(allRegistries[index].accountId);
+                return RecentActivityTile(
+                title: allRegistries[index].title,
+                description: allRegistries[index].description,
+                account: accountName ?? 'No se encontró la cuenta',  
+                amount: allRegistries[index].amount,
+                isDeposit: allRegistries[index].isDeposit,
+                onTap: (){
+                  Navigator.pushNamed(context, '/registrydetails', arguments: allRegistries[index]);
+                },
+              );
+              
+            },
           ),
+                    ),
           
 
         ],
@@ -101,10 +108,15 @@ class _InicioPageState extends State<InicioPage> {
 
           
       
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        backgroundColor: CustomColors.black,
-        child: const Icon(Icons.add, color: CustomColors.white,)
+      floatingActionButton: Visibility(
+        visible: getUserAccounts(globalUser!.id).isNotEmpty,
+        child: FloatingActionButton(
+          onPressed: (){
+            //TODO:Poner la navegacion a la pagina de agregar registro
+          },
+          backgroundColor: CustomColors.black,
+          child: const Icon(Icons.add, color: CustomColors.white,)
+        ),
       ),
     );
   }

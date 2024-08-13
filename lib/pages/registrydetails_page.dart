@@ -2,7 +2,8 @@ import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/business_logic/data_functions.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
-import 'package:app_fintes/widgets/form/custom_dopdown.dart';
+import 'package:app_fintes/widgets/scaffoldmsgs.dart';
+import 'package:app_fintes/widgets/form/custom_dropdown.dart';
 import 'package:app_fintes/widgets/form/custom_textformfield.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
@@ -15,13 +16,30 @@ class RegistrydetailsPage extends StatefulWidget {
 }
 
 class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
-  bool isEditable = false;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Registry registry = ModalRoute.of(context)!.settings.arguments as Registry;
+      titleController!.text = registry.title;
+      descriptionController!.text = registry.description;
+      amountController!.text = registry.amount.toString();
+      selectedType = (registry.isDeposit)?'Ingreso':'Egreso';
+      selectedAccount = registry.accountId;
+    });
+  }
+
   final _formKey = GlobalKey<FormState>();
+  bool isEditable = false;
+  TextEditingController? titleController = TextEditingController();
+  TextEditingController? descriptionController = TextEditingController();
+  TextEditingController? amountController = TextEditingController();
+  String? selectedType, selectedAccount;
 
   @override
   Widget build(BuildContext context) {
     Registry registry = ModalRoute.of(context)!.settings.arguments as Registry;
-    List<Account> accounts = getUserAccounts(globalUser!.id);
+    List<Account> accounts = getAllUserAccounts(globalUser!.id);
     List<DropdownMenuItem<String>> accountOptions = [
       for (Account account in accounts)
         DropdownMenuItem<String>(
@@ -40,11 +58,6 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
       ),
     ];
 
-    TextEditingController titleController = TextEditingController(text: registry.title);
-    TextEditingController descriptionController = TextEditingController();
-    TextEditingController amountController = TextEditingController(text: registry.amount.toString());
-
-
 
     return Scaffold(
       appBar: AppBar(
@@ -55,6 +68,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
+            setState(() {});
           },
           icon: const Icon(Icons.arrow_back),
         ),
@@ -94,32 +108,25 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
           children: [
 
             CustomTextFormField(
-              initialValue: registry.title,
-              //controller: titleController,
+              controller: titleController,
               labelText: "Título", 
               isEditable: isEditable,
               maxLength: 50,
               maxLines: 3,
               validator: (v)=>(v!.isEmpty)?'Este campo es requerido':null,
-              onChanged: (v){
-                titleController.text = v;
-                print("Esto vienen del onvhanged: "+titleController.text);
-              },
             ),
 
             CustomTextFormField(
-              initialValue: "",
               labelText: "Descripción", 
-              //controller: descriptionController,
+              controller: descriptionController,
               isEditable: isEditable,
               maxLength: 90,
               maxLines: 3,
             ),
 
             CustomTextFormField(
-              initialValue: registry.amount.toString(),
               labelText: "Cantidad", 
-              //controller: amountController,
+              controller: amountController,
               isEditable: isEditable,
               textAlignment: TextAlign.end,              
               prefixText: 'L. ',
@@ -138,17 +145,18 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
               labeltext: 'Cuenta:',
               value: registry.accountId,
               options: accountOptions,
-              onChanged: (String? newValue) {
-                },
-              ),
+              onChanged: (val){
+                selectedAccount = val!;
+              },
+            ),
 
             CustomDropDown(
               isEditable: isEditable,
               labeltext: 'Tipo:',
               value: (registry.isDeposit)?'Ingreso':'Egreso',
               options: resgistryTypeOpts,
-              onChanged: (String? newValue) {
-                print(newValue);
+              onChanged: (val){
+                selectedType = val!;
               },
             ),
 
@@ -162,7 +170,6 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
               style: Theme.of(context).textTheme.bodyMedium!.apply(color: CustomColors.black),
             ),
             const SizedBox(height: 50),
-
             
             
             Visibility(
@@ -179,7 +186,12 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                     ),
                   ),
                   onPressed: () {
-                    // Add your delete functionality here
+                    if(deleteRegistry(registry.registryId)){
+                      successScaffoldMsg(context, "Registro eliminado exitosamente");
+                      Navigator.pop(context);
+                    } else {
+                      scaffoldErrorMsg(context, "No se pudo eliminar el registro");
+                    }
                   },
                 ),
               ),
@@ -189,7 +201,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
               visible: isEditable,
               child: Center(
                 child: ElevatedButton.icon(
-                  icon: Icon(Icons.save, color: CustomColors.white,size: 30,),
+                  icon: const Icon(Icons.save, color: CustomColors.white,size: 30,),
                   label: Text('Guardar', style: Theme.of(context).textTheme.bodyLarge!.apply(color: CustomColors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: CustomColors.black,
@@ -200,8 +212,24 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Add your save functionality here
-                      print("Esto viene del guardar: "+titleController.text);
+                      
+                      Registry newRegistry = Registry(
+                        registryId: registry.registryId,
+                        title: titleController!.text,
+                        description: descriptionController!.text,
+                        amount: double.parse(amountController!.text),
+                        accountId: selectedAccount!,
+                        ownerId: globalUser!.id,
+                        isDeposit: (selectedType == 'Ingreso'),
+                        date: registry.date,
+                      );
+                      print(newRegistry.toString());
+
+                      if(updateRegistry(newRegistry)){
+                        successScaffoldMsg(context, "Registro guardado exitosamente");
+                      } else {
+                        scaffoldErrorMsg(context, "No se pudo guardar el registro");
+                      }
                     }
                   },
                 ),

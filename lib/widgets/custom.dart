@@ -9,6 +9,7 @@ class CustomForm extends StatelessWidget {
     required this.controller,
     required this.hintText,
     required this.icon,
+    this.keyboardType,
     this.icon1,
     this.validator,
     this.obscureText = false, 
@@ -18,6 +19,7 @@ class CustomForm extends StatelessWidget {
   final String label;
   final int? maxLength;
   final String hintText;
+  final TextInputType? keyboardType;
   final TextEditingController controller;
   final Icon? icon;
   final IconButton? icon1;
@@ -30,7 +32,7 @@ class CustomForm extends StatelessWidget {
       controller: controller,
       validator: validator,
       obscureText: obscureText,
-      keyboardType: TextInputType.text,
+      keyboardType: (keyboardType == null)?TextInputType.text:keyboardType,
       style: const TextStyle(fontSize: 18),
       maxLength: maxLength,
       maxLines: 1,

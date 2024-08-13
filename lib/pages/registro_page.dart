@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:app_fintes/business_logic/user_functions.dart';
 import 'package:app_fintes/widgets/custom.dart';
-import 'package:app_fintes/widgets/theme_config.dart';
-import 'package:flutter/foundation.dart';
+import 'package:app_fintes/widgets/scaffoldmsgs.dart';
 import 'package:flutter/material.dart';
 
 class RegistroPage extends StatefulWidget {
@@ -68,6 +65,7 @@ class RegistroPageState extends State<RegistroPage> {
                     const SizedBox(height: 25),
                     CustomForm(
                       controller: correoController,
+                      keyboardType: TextInputType.emailAddress,
                       label: 'Correo',
                       hintText: 'Ingrese su correo',
                       maxLength: 30,
@@ -92,6 +90,7 @@ class RegistroPageState extends State<RegistroPage> {
                         return null;
                       },
                       controller: contraseniaController,
+                      keyboardType: TextInputType.visiblePassword,
                       label: 'Contraseña',
                       hintText: 'Ingrese una contraseña',
                       icon: const Icon(Icons.password),
@@ -148,24 +147,11 @@ class RegistroPageState extends State<RegistroPage> {
                           contraseniaController.text,
                         );
                         if(isregistered){
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: CustomColors.darkBlue,
-                              content: Text('Usuario registrado con éxito', style: Theme.of(context).textTheme.titleSmall),
-                              duration: const Duration(seconds: 3),
-                              
-                            ),
-                          );
+                          successScaffoldMsg(context, 'Usuario registrado exitosamente');
                           Navigator.pushReplacementNamed(context, '/principal');
                           
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: CustomColors.lightBlue,
-                              content: Text('Este usuario ya existe', style: Theme.of(context).textTheme.titleSmall),
-                              duration:const Duration(seconds: 3),
-                            ),
-                          );
+                          scaffoldErrorMsg(context, 'El correo ya está registrado');
                         }
                       },
                       style: ElevatedButton.styleFrom(

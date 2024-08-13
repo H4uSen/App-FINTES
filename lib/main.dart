@@ -27,7 +27,7 @@ class MainApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/registro': (context) => const RegistroPage(),
         '/home': (context) => const InicioPage(),
-        '/registrydetails': (context) => const RegistrydetailsPage(),
+        '/registrydetails': (context) => RegistrydetailsPage(),
         '/accountdetails': (context) => const AccountDetailsPage(),
         '/accountmanagement': (context) => const GestionCuentas(),
       },

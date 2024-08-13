@@ -3,6 +3,7 @@ import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/business_logic/models/user_model.dart';
 import 'package:app_fintes/business_logic/user_functions.dart';
 import 'package:app_fintes/widgets/custom.dart';
+import 'package:app_fintes/widgets/scaffoldmsgs.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 
@@ -44,8 +45,10 @@ class LoginPageState extends State<LoginPage> {
                 key: formkey,
                 child: Column(
                   children: [
+                    SizedBox(height: 50),
                     CustomForm(
                       controller: correoController,
+                      keyboardType: TextInputType.emailAddress,
                       label: 'Correo',
                       hintText: 'Ingrese su correo',
                       icon: const Icon(Icons.email),
@@ -55,9 +58,10 @@ class LoginPageState extends State<LoginPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 50),
                     CustomForm(
                       controller: contraseniaController,
+                      keyboardType: TextInputType.visiblePassword,
                       label: 'Contraseña',
                       hintText: 'Ingrese su contraseña',
                       icon: const Icon(Icons.password),
@@ -79,29 +83,15 @@ class LoginPageState extends State<LoginPage> {
 
                       },
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 50),
                     ElevatedButton(
                       onPressed: () {
                         if (!formkey.currentState!.validate()) return;
                         User? user = login(correoController.text, contraseniaController.text);
                         if (user == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(10),
-                                    child: Icon(Icons.error,size: 40,),
-                                  ),
-                                  Text('Correo o contraseña incorrecta',overflow: TextOverflow.ellipsis,maxLines: 2,),
-                                ],
-                              ),
-                              backgroundColor: CustomColors.red,
-                            ),
-                          );
+                          scaffoldErrorMsg(context, 'Correo o contraseña incorrectos');
                           return;
                         }
-                        //globalUser = user;
                         if(globalUser == null) return;
                         Navigator.pushReplacementNamed(context, '/home');
                       },

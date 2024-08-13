@@ -27,8 +27,8 @@ List<Account> accounts = const [
     ownerId: '1',
   ),
   Account(
-    ownerId: '1',
     accountId: '5',
+    ownerId: '1',
     accountName: 'Telefono',
     accountType: AccountType.goal,
     goalAmount: 24000.00,

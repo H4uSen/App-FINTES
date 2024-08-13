@@ -26,6 +26,43 @@ String fixedCurrency ( double amount, [String? currency]) {
 
 
 //Account related functions
+bool addAccount(Account account) {
+  try{
+    accounts.add(account);
+    return true;
+  }catch(e) {
+    return false;
+  }
+}
+bool updateAccount(Account account) {
+  try{
+    for(var acc in accounts) {
+      if(acc.accountId == account.accountId) {
+        acc = account;
+        return true;
+      }
+    }
+    return false;
+  }catch(e) {
+    return false;
+  }
+}
+bool deleteAccount(String accountId) {
+  try{
+    accounts.removeWhere((element) => element.accountId == accountId);
+    return true;
+  }catch(e) {
+    return false;
+  }
+}
+
+List<Account> getAllUserAccounts(String userId) {
+  List<Account> userAccounts = [];
+  for(var account in accounts) {
+    (account.ownerId == userId)?userAccounts.add(account):null;
+  }
+  return userAccounts;
+}
 List<Account> getUserAccounts(String userId) {
   List<Account> userAccounts = [];
   for(var account in accounts) {
