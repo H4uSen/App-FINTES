@@ -18,6 +18,23 @@ List<Goal> getUserGoals(String userId)  {
   return goals;
 }
 
+Future<List<Goal>> getUserGoalsTest(String userId)  async {
+  List<Goal> goals = [];
+  FirebaseFirestore.instance.collection('Goals')
+    .where('ownerId', isEqualTo: userId)
+    .get()
+    .then((value) {
+      for (var doc in value.docs){
+        Goal goal = Goal.fromJson(doc.data(), doc.id);
+        goals.add(goal);
+      }
+      return goals;
+    })
+    .catchError((error){return goals;});
+  return goals;
+}
+
+
 double getGoalCollected (String userId, String goalId) {
   double collected = 0;
   collected = getAccountDeposits(userId, goalId);

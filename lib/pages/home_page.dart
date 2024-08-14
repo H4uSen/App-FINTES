@@ -13,6 +13,7 @@ import 'package:app_fintes/pages/drawer.dart';
 import 'package:app_fintes/widgets/home/goal_card.dart';
 import 'package:app_fintes/widgets/home/recentactivity_tile.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 
@@ -32,8 +33,15 @@ class _InicioPageState extends State<InicioPage> {
     Navigator.pushReplacementNamed(context, '/principal');
   }
   User user = globalUser!;
-  List<Registry> allRegistries = getAllUserRegistries(user.id);
-  List<Goal> goalAccounts = getUserGoals(user.id);
+  // List<Registry> allRegistries = getAllUserRegistries(user.id);
+  // List<Goal> goalAccounts = getUserGoals(user.id);
+
+  final goalsRef = FirebaseFirestore.instance
+        .collection('Goals')
+        .withConverter(
+          fromFirestore: (snapshot, _) => Goal.fromJson(snapshot.data()!,globalUser!.id),
+          toFirestore: (model, _) => model.toJson(),
+        );
 
     return Scaffold(
       drawer: CustomDrawer(),
@@ -46,68 +54,130 @@ class _InicioPageState extends State<InicioPage> {
       //TODO: Hacer que se vea un mensaje de vacio si no hay metas o registros
       body: Column(
         children: [
-          const CustomDivider(title: 'Resumen de metas'),
-          Visibility(
-            visible: goalAccounts.isEmpty,
-            child: const CustomDivider(title: "Vacío", showLines: false),
-            ),
-          SizedBox(
-            height: 280,
-            child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: goalAccounts.length,
-                  itemBuilder: (context, index) {
-                      double goal = goalAccounts[index].goalAmount;
-                      double collected = getGoalCollected(user.id, goalAccounts[index].goalId);
-                      return SizedBox(
-                        width: 300,
-                        child: GoalCard(
-                          title: goalAccounts[index].goalName,
-                          row1: 'Objetivo:',
-                          row2: 'Reunido:',
-                          row3: 'Restante:',
-                          money1: goal,
-                          money2: collected,
-                          money3: goal - collected,
-                          onTap: (){
-                            Navigator.pushNamed(context, 
-                              '/accountdetails', 
-                              arguments: [goalAccounts[index].accountType, goalAccounts[index].goalId, goalAccounts[index].goalName]);
+
+          FutureBuilder(
+            future: goalsRef.get(),
+            builder: (context, snapshot) {
+              if(snapshot.connectionState == ConnectionState.waiting){
+                return const Center(child: CircularProgressIndicator());
+              }
+              if(snapshot.hasError){
+                return const Center(child: Text('Error al cargar las metas'));
+              }
+              final querySnapshot = snapshot.data;
+
+              if (querySnapshot == null) {
+                return const Text('No hay documentos');
+              }
+
+              final goalAccounts = querySnapshot.docs.map((e) => e.data()).toList();
+              
+              return Column(
+                children: [
+                  const CustomDivider(title: 'Resumen de metas'),
+                  Visibility(
+                    visible: goalAccounts.isEmpty,
+                    child: const CustomDivider(title: "Vacío", showLines: false),
+                    ),
+                  SizedBox(
+                    height: 280,
+                    child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: goalAccounts.length,
+                          itemBuilder: (context, index) {
+                              double goal = goalAccounts[index].goalAmount;
+                              double collected = getGoalCollected(user.id, goalAccounts[index].goalId);
+                              return SizedBox(
+                                width: 300,
+                                child: GoalCard(
+                                  title: goalAccounts[index].goalName,
+                                  row1: 'Objetivo:',
+                                  row2: 'Reunido:',
+                                  row3: 'Restante:',
+                                  money1: goal,
+                                  money2: collected,
+                                  money3: goal - collected,
+                                  onTap: (){
+                                    Navigator.pushNamed(context, 
+                                      '/accountdetails', 
+                                      arguments: [goalAccounts[index].accountType, goalAccounts[index].goalId, goalAccounts[index].goalName]);
+                                  },
+                                  showLeadingButton: true,
+                                ),
+                              );
+                          
                           },
-                          showLeadingButton: true,
                         ),
-                      );
-                    
-                  },
-                ),
+                  ),
+                ],
+              );
+
+            },
           ),
+
+
+          // const CustomDivider(title: 'Resumen de metas'),
+          // Visibility(
+          //   visible: goalAccounts.isEmpty,
+          //   child: const CustomDivider(title: "Vacío", showLines: false),
+          //   ),
+          // SizedBox(
+          //   height: 280,
+          //   child: ListView.builder(
+          //         scrollDirection: Axis.horizontal,
+          //         itemCount: goalAccounts.length,
+          //         itemBuilder: (context, index) {
+          //             double goal = goalAccounts[index].goalAmount;
+          //             double collected = getGoalCollected(user.id, goalAccounts[index].goalId);
+          //             return SizedBox(
+          //               width: 300,
+          //               child: GoalCard(
+          //                 title: goalAccounts[index].goalName,
+          //                 row1: 'Objetivo:',
+          //                 row2: 'Reunido:',
+          //                 row3: 'Restante:',
+          //                 money1: goal,
+          //                 money2: collected,
+          //                 money3: goal - collected,
+          //                 onTap: (){
+          //                   Navigator.pushNamed(context, 
+          //                     '/accountdetails', 
+          //                     arguments: [goalAccounts[index].accountType, goalAccounts[index].goalId, goalAccounts[index].goalName]);
+          //                 },
+          //                 showLeadingButton: true,
+          //               ),
+          //             );
+                    
+          //         },
+          //       ),
+          // ),
 
           
 
-          const CustomDivider(title: 'Actividades recientes'),
-          Visibility(
-            visible: allRegistries.isEmpty,
-            child: const CustomDivider(title: "Vacío", showLines: false),
-            ),
-          Expanded(
-            child: ListView.builder(
-            itemCount: allRegistries.length,
-            itemBuilder: (context, index) {
-                String? accountName = getAccountNameById(allRegistries[index].accountId);
-                return RecentActivityTile(
-                title: allRegistries[index].title,
-                description: allRegistries[index].description,
-                account: accountName,  
-                amount: allRegistries[index].amount,
-                isDeposit: allRegistries[index].isDeposit,
-                onTap: (){
-                  Navigator.pushNamed(context, '/registrydetails', arguments: allRegistries[index]);
-                },
-              );
+          // const CustomDivider(title: 'Actividades recientes'),
+          // Visibility(
+          //   visible: allRegistries.isEmpty,
+          //   child: const CustomDivider(title: "Vacío", showLines: false),
+          //   ),
+          // Expanded(
+          //   child: ListView.builder(
+          //   itemCount: allRegistries.length,
+          //   itemBuilder: (context, index) {
+          //       String? accountName = getAccountNameById(allRegistries[index].accountId);
+          //       return RecentActivityTile(
+          //       title: allRegistries[index].title,
+          //       description: allRegistries[index].description,
+          //       account: accountName,  
+          //       amount: allRegistries[index].amount,
+          //       isDeposit: allRegistries[index].isDeposit,
+          //       onTap: (){
+          //         Navigator.pushNamed(context, '/registrydetails', arguments: allRegistries[index]);
+          //       },
+          //     );
               
-            },
-          ),
-                    ),
+          //   },
+          // ),
+          //),
           
 
         ],
@@ -116,7 +186,8 @@ class _InicioPageState extends State<InicioPage> {
           
       
       floatingActionButton: Visibility(
-        visible: getUserGoals(globalUser!.id).isNotEmpty || getUserAccounts(globalUser!.id).isNotEmpty|| getUserRecurrents(globalUser!.id).isNotEmpty,
+        //TODO: Hacer que el boton flotante sea visible solo si el usuario esta logeado
+        visible: true,
         child: FloatingActionButton(
           onPressed: (){
             //TODO:Poner la navegacion a la pagina de agregar registro
