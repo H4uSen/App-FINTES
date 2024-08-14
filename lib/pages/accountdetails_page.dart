@@ -1,32 +1,39 @@
 import 'package:app_fintes/business_logic/data/globals.dart';
-import 'package:app_fintes/business_logic/models/account_model.dart';
-import 'package:app_fintes/business_logic/data/registries_data.dart';
-import 'package:app_fintes/business_logic/data_functions.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
+import 'package:app_fintes/business_logic/recurrent_functions.dart';
 import 'package:app_fintes/pages/drawer.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
 import 'package:app_fintes/widgets/home/goal_card.dart';
 import 'package:app_fintes/widgets/home/recentactivity_tile.dart';
 import 'package:flutter/material.dart';
 
+import '../business_logic/registry_functions.dart';
+
 class AccountDetailsPage extends StatelessWidget {
   const AccountDetailsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    
     if(globalUser == null) {
     Navigator.pushReplacementNamed(context, '/principal');
     }
 
-    Account account = ModalRoute.of(context)!.settings.arguments as Account;
-    String accountType = ((account.accountType == AccountType.goal)?"Meta":(account.accountType == AccountType.account)?"Cuenta":"Pago");
-    List<Registry> accountRegistries = getAccountRegistries(globalUser!.id, account.accountId);
+    List<String> args = ModalRoute.of(context)!.settings.arguments as List<String>;
+    String argAccountType = args[0];
+    String argAccountId = args[1];
+    String argAccountName = args[2];
+    
+
+
+    String accountType = ((argAccountType == AccountType.goal)?"Meta":(argAccountType == AccountType.account)?"Cuenta":"Pago");
+    List<Registry> accountRegistries = getAccountRegistries(globalUser!.id, argAccountId);
     String row1, row2, row3;
-    if(AccountType.goal == account.accountType){
+    if(AccountType.goal == argAccountType){
       row1 = 'Objetivo:';
       row2 = 'Reunido:';
       row3 = 'Restante:';
-    } else if (AccountType.account == account.accountType){
+    } else if (AccountType.account == argAccountType){
       row1 = 'Depositos:';
       row2 = 'Retiros:';
       row3 = 'Saldo:';
@@ -36,21 +43,21 @@ class AccountDetailsPage extends StatelessWidget {
       row3 = 'Total pagado:';
     }
     
-    double deposits = getAccountDeposits(globalUser!.id, account.accountId);
-    double withdrawals = getAccountWithdrawals(globalUser!.id, account.accountId);
+    double deposits = getAccountDeposits(globalUser!.id, argAccountId);
+    double withdrawals = getAccountWithdrawals(globalUser!.id, argAccountId);
     double balance = deposits - withdrawals;
 
-    if(account.accountType == AccountType.recurrentPayment){
-      deposits = account.recurrentAmount!;
-      withdrawals = getAccountRegistries(globalUser!.id, account.accountId).length*1.00;
-      balance = getAccountWithdrawals(globalUser!.id , account.accountId);
+    if(argAccountType == AccountType.recurrentPayment){
+      deposits = getRecurrentDeposits(globalUser!.id, argAccountId);
+      withdrawals = getAccountRegistries(globalUser!.id, argAccountId).length*1.00;
+      balance = getAccountWithdrawals(globalUser!.id , argAccountId);
     }
     
     return Scaffold(
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(), 
       appBar: AppBar(
         title: Text(
-          account.accountName,
+          argAccountName,
         ),
         centerTitle: true,
       ),
@@ -64,7 +71,7 @@ class AccountDetailsPage extends StatelessWidget {
             money1: deposits,
             money2: withdrawals,
             money3: balance,
-            currency2: (account.accountType == AccountType.recurrentPayment)?false:true,
+            currency2: (accountType == AccountType.recurrentPayment)?false:true,
             showLeadingButton: false,
             ),
 
@@ -73,9 +80,9 @@ class AccountDetailsPage extends StatelessWidget {
               child: ListView.builder(
                 itemCount: accountRegistries.length,
                 itemBuilder: (context, index) {
-                  String? accountName = getAccountNameById(accountRegistries[index].accountId);
+                  String? accountName = argAccountName;
                   return RecentActivityTile(
-                    account: accountName!,
+                    account: accountName,
                     title: accountRegistries[index].title,
                     description: accountRegistries[index].description,
                     amount: accountRegistries[index].amount,

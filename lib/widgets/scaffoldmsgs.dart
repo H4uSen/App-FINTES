@@ -1,19 +1,21 @@
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 
-void successScaffoldMsg(BuildContext context,String message) {
+void successScaffoldMsg(BuildContext context,String message, 
+  {Color backgroundColor = CustomColors.lightBlue, Color textColor = CustomColors.black}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: CustomColors.lightBlue,
+        backgroundColor: backgroundColor,
         content: Text(message, 
-          style: Theme.of(context).textTheme.titleSmall!.apply(color: CustomColors.black)),
+          style: Theme.of(context).textTheme.titleSmall!.apply(color: textColor)),
         duration: const Duration(seconds: 3),
         
       ),
     );
   }
 
-  void scaffoldErrorMsg(BuildContext context, String message) {
+  void errorScaffoldMsg(BuildContext context, String message,
+  {Color backgroundColor = CustomColors.lightBlue, Color textColor = CustomColors.black}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 3),
@@ -26,10 +28,10 @@ void successScaffoldMsg(BuildContext context,String message) {
             Text(message,
               overflow: TextOverflow.ellipsis,
               maxLines: 1, 
-              style: Theme.of(context).textTheme.bodyMedium!.apply(color: CustomColors.black,)),
+              style: Theme.of(context).textTheme.bodyMedium!.apply(color: textColor,)),
           ],
         ),
-        backgroundColor: CustomColors.lightBlue,
+        backgroundColor: backgroundColor,
       ),
     );
   }

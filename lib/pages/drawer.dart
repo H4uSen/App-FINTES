@@ -1,6 +1,11 @@
+import 'package:app_fintes/business_logic/account_functions.dart';
 import 'package:app_fintes/business_logic/data/globals.dart';
+import 'package:app_fintes/business_logic/goal_functions.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
-import 'package:app_fintes/business_logic/data_functions.dart';
+import 'package:app_fintes/business_logic/models/goal_model.dart';
+import 'package:app_fintes/business_logic/models/recurrent_model.dart';
+import 'package:app_fintes/business_logic/recurrent_functions.dart';
+import 'package:app_fintes/business_logic/utilitity_functions.dart';
 import 'package:app_fintes/pages/principal_page.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
 import 'package:app_fintes/widgets/drawer/drawer_navtile.dart';
@@ -9,7 +14,12 @@ import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatefulWidget {
-  const CustomDrawer({super.key});
+  CustomDrawer({super.key});
+
+  final List<Account> accounts = getUserAccounts(globalUser!.id);
+  final List<Goal> goals = getUserGoals(globalUser!.id);
+  final List<RecurrentPayment> recurrents = getUserRecurrents(globalUser!.id);
+  
 
   @override
   State<CustomDrawer> createState() => _CustomDrawerState();
@@ -19,12 +29,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
 
-    List<Account> accounts = getUserAccounts(globalUser!.id);
-    bool hasAccounts = accounts.isEmpty;
-    List<Account> goals = getUserGoals(globalUser!.id);
-    bool hasGoals = goals.isEmpty;
-    List<Account> recurrents = getUserRecurrents(globalUser!.id);
-    bool hasRecurrents = recurrents.isEmpty;
+    // final List<Account> accounts = getUserAccounts(globalUser!.id);
+    bool hasAccounts = widget.accounts.isEmpty;
+    // List<Account> goals = getUserGoals(globalUser!.id);
+    bool hasGoals = widget.goals.isEmpty;
+    // List<Account> recurrents = getUserRecurrents(globalUser!.id);
+    bool hasRecurrents = widget.recurrents.isEmpty;
 
     return Drawer(
       backgroundColor: CustomColors.lightBlue,
@@ -89,14 +99,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
                 //TODO: Hacer que los botones se les ponga una sombra para identificar la pagina actual y añadir la navegación a las otras paginas
                 const CustomDivider(title: 'Cuentas'),
-                for (var account in accounts)
-                  if (account.accountType == AccountType.account)
+                for (var account in widget.accounts)
                     DrawerNavTile(
                       isSelected: account.accountName == getSelectedDrawerOption(),
                       title: account.accountName, 
                       icon: Icons.attach_money_rounded, 
                       onTap: (){
-                        Navigator.pushNamed(context, '/accountdetails', arguments: account);
+                        Navigator.pushNamed(context, 
+                          '/accountdetails', 
+                          arguments: [account.accountType,account.accountId,account.accountName]);
                         setSelectedDrawerOption(account.accountName);
                         setState(() {});
                       }, 
@@ -113,15 +124,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
 
                 const CustomDivider(title: 'Metas'),
-                for (var account in goals)
-                  if (account.accountType == AccountType.goal)
+                for (var goal in widget.goals)
                     DrawerNavTile(
-                      isSelected: account.accountName == getSelectedDrawerOption(),
-                      title: account.accountName, 
+                      isSelected: goal.goalName == getSelectedDrawerOption(),
+                      title: goal.goalName, 
                       icon: Icons.flag_rounded, 
                       onTap: (){
-                        Navigator.pushNamed(context, '/accountdetails', arguments: account);
-                        setSelectedDrawerOption(account.accountName);
+                        Navigator.pushNamed(context, 
+                          '/accountdetails', 
+                          arguments: [goal.accountType,goal.goalId,goal.goalName]);
+                        setSelectedDrawerOption(goal.goalName);
                         setState(() {});
                       }, 
                       iconBkgColor: CustomColors.yellow,
@@ -136,17 +148,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
 
                 const CustomDivider(title: 'Pagos recurrentes'),
-                for (var account in recurrents)
-                  if (account.accountType == AccountType.recurrentPayment)
+                for (var recurrent in widget.recurrents)
                     DrawerNavTile(
-                      isSelected: account.accountName == getSelectedDrawerOption(),
-                      title: account.accountName, 
+                      isSelected: recurrent.recurrentName == getSelectedDrawerOption(),
+                      title: recurrent.recurrentName, 
                       icon: Icons.lock_clock,
-                      subtitle: fixedCurrency(account.recurrentAmount!, "L."),
+                      subtitle: fixedCurrency(recurrent.recurrentAmount, "L."),
                       subColor: CustomColors.red,
                       onTap: (){
-                        Navigator.pushNamed(context, '/accountdetails', arguments: account);
-                        setSelectedDrawerOption(account.accountName);
+                        Navigator.pushNamed(context, 
+                          '/accountdetails', 
+                          arguments:[ recurrent.accountType,recurrent.recurrentId,recurrent.recurrentName]);
+                        setSelectedDrawerOption(recurrent.recurrentName);
                         setState(() {});
                       }, 
                       iconBkgColor: CustomColors.red,
@@ -187,7 +200,5 @@ class _CustomDrawerState extends State<CustomDrawer> {
 void drawerSelectedControl(String accountSelected){
   List<Account> accounts = getUserAccounts(globalUser!.id);
   if(accounts.isEmpty) return;
-
-
 }
 

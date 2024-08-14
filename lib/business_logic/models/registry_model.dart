@@ -10,7 +10,7 @@ class Registry {
 
   Registry({
     required this.ownerId,
-    required this.registryId,
+    this.registryId = "",
     required this.title,
     required this.description,
     required this.accountId,
@@ -18,4 +18,29 @@ class Registry {
     required this.isDeposit,
     required this.date,
   });
+
+  factory Registry.fromJson(Map<String, dynamic> json, String id) {
+    return Registry(
+      registryId: id,
+      ownerId: json['ownerId'],
+      title: json['title'],
+      description: json['description'],
+      accountId: json['accountId'],
+      amount: json['amount'],
+      isDeposit: json['isDeposit'],
+      date: json['date'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'ownerId': ownerId,
+      'title': title,
+      'description': description,
+      'accountId': accountId,
+      'amount': amount,
+      'isDeposit': isDeposit,
+      'date': date,
+    };
+  }
 }

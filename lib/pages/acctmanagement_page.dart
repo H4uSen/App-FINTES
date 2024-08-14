@@ -1,7 +1,11 @@
 // pages/acctmanagement_page.dart
+import 'package:app_fintes/business_logic/account_functions.dart';
 import 'package:app_fintes/business_logic/data/globals.dart';
-import 'package:app_fintes/business_logic/data_functions.dart';
+import 'package:app_fintes/business_logic/goal_functions.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
+import 'package:app_fintes/business_logic/models/goal_model.dart';
+import 'package:app_fintes/business_logic/models/recurrent_model.dart';
+import 'package:app_fintes/business_logic/recurrent_functions.dart';
 import 'package:app_fintes/widgets/acct_listtile.dart';
 import 'package:app_fintes/widgets/form/custom_button.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +18,8 @@ class GestionCuentas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Account> accounts = getUserAccounts(globalUser!.id);
-    List<Account> goals = getUserGoals(globalUser!.id);
-    List<Account> recurrents = getUserRecurrents(globalUser!.id);
+    List<Goal> goals = getUserGoals(globalUser!.id);
+    List<RecurrentPayment> recurrents = getUserRecurrents(globalUser!.id);
     bool hasRecurrents = recurrents.isEmpty;
     bool hasGoals = goals.isEmpty;
     bool hasAccounts = accounts.isEmpty;
@@ -73,7 +77,7 @@ class GestionCuentas extends StatelessWidget {
 
             for (var goal in goals)
               AcctListtile(
-                title: goal.accountName,
+                title: goal.goalName,
                 leadingIcon: Icons.flag,
                 leadingIconBackgroundColor: CustomColors.yellow,
                 editIcon: Icons.edit,
@@ -107,7 +111,7 @@ class GestionCuentas extends StatelessWidget {
             const SizedBox(height: 15),
             for (var recurrent in recurrents)
               AcctListtile(
-                title: recurrent.accountName,
+                title: recurrent.recurrentName,
                 leadingIcon: Icons.lock_clock,
                 leadingIconBackgroundColor: CustomColors.red,
                 editIcon: Icons.edit,

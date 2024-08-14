@@ -1,34 +1,33 @@
 
-
-import 'package:app_fintes/business_logic/models/registry_model.dart';
-import 'package:app_fintes/business_logic/models/user_model.dart';
-
-class AccountType {
-  static const String account = 'Account';
-  static const String goal = 'Goal';
-  static const String recurrentPayment = 'RecurrentPayment';
-}
+import 'package:app_fintes/business_logic/data/globals.dart';
 
 class Account {
   final String accountId;
   final String accountName;
-  final String accountType;
-
-  final double? recurrentAmount;
-  final bool? isDeposit;
-  final double? goalAmount;
-
   final String ownerId;
+  final String accountType = AccountType.account;
 
   const Account({
     required this.ownerId,
-    required this.accountId,
+    this.accountId ="",
     required this.accountName,
-    required this.accountType,
-
-    this.recurrentAmount, 
-    this.isDeposit, 
-    this.goalAmount, 
   });
+
+  factory Account.fromJson(Map<String, dynamic> json, String id) {
+    return Account(
+      accountId: id,
+      ownerId: json['ownerId'],
+      accountName: json['name'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'ownerId': ownerId,
+      'accountName': accountName,
+    };
+  }
   
 }
+
+

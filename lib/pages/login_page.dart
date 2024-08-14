@@ -54,7 +54,7 @@ class LoginPageState extends State<LoginPage> {
                       icon: const Icon(Icons.email),
                       validator: (valor) {
                         if (valor == null || valor.isEmpty) return 'Ingrese su correo';
-                        if ("@".allMatches(valor,0).length > 1) return 'Ingrese un correo válido';
+                        if ("@".allMatches(valor,0).length != 1) return 'Ingrese un correo válido';
                         return null;
                       },
                     ),
@@ -85,15 +85,20 @@ class LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 50),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (!formkey.currentState!.validate()) return;
-                        User? user = login(correoController.text, contraseniaController.text);
-                        if (user == null) {
-                          scaffoldErrorMsg(context, 'Correo o contraseña incorrectos');
-                          return;
-                        }
-                        if(globalUser == null) return;
-                        Navigator.pushReplacementNamed(context, '/home');
+
+                        await login(correoController.text, contraseniaController.text)
+                        .then((value) {
+                          if (value != null) {
+                            globalUser = value;
+                            Navigator.pushReplacementNamed(context, '/home');
+                          }else{
+                            errorScaffoldMsg(context, 'Correo o contraseña incorrectos');
+                            return;
+                          }
+                        });
+                        
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),

@@ -1,7 +1,12 @@
+import 'package:app_fintes/business_logic/account_functions.dart';
 import 'package:app_fintes/business_logic/data/globals.dart';
-import 'package:app_fintes/business_logic/data_functions.dart';
+import 'package:app_fintes/business_logic/goal_functions.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
+import 'package:app_fintes/business_logic/models/goal_model.dart';
+import 'package:app_fintes/business_logic/models/recurrent_model.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
+import 'package:app_fintes/business_logic/recurrent_functions.dart';
+import 'package:app_fintes/business_logic/registry_functions.dart';
 import 'package:app_fintes/widgets/scaffoldmsgs.dart';
 import 'package:app_fintes/widgets/form/custom_dropdown.dart';
 import 'package:app_fintes/widgets/form/custom_textformfield.dart';
@@ -39,7 +44,10 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
   @override
   Widget build(BuildContext context) {
     Registry registry = ModalRoute.of(context)!.settings.arguments as Registry;
-    List<Account> accounts = getAllUserAccounts(globalUser!.id);
+    List<Account> accounts = getUserAccounts(globalUser!.id);
+    List<Goal> goals = getUserGoals(globalUser!.id);
+    List<RecurrentPayment> recurrents = getUserRecurrents(globalUser!.id);
+    
     List<DropdownMenuItem<String>> accountOptions = [
       for (Account account in accounts)
         DropdownMenuItem<String>(
@@ -185,13 +193,15 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  onPressed: () {
-                    if(deleteRegistry(registry.registryId)){
-                      successScaffoldMsg(context, "Registro eliminado exitosamente");
-                      Navigator.pop(context);
-                    } else {
-                      scaffoldErrorMsg(context, "No se pudo eliminar el registro");
-                    }
+                  onPressed: () async{
+                    await deleteRegistry(registry.registryId).then((val){
+                      if(val){
+                        successScaffoldMsg(context, "Registro eliminado exitosamente");
+                        Navigator.pop(context);
+                      } else {
+                        errorScaffoldMsg(context, "No se pudo eliminar el registro");
+                      }
+                    });
                   },
                 ),
               ),
@@ -210,7 +220,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       
                       Registry newRegistry = Registry(
@@ -223,13 +233,15 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                         isDeposit: (selectedType == 'Ingreso'),
                         date: registry.date,
                       );
-                      print(newRegistry.toString());
-
-                      if(updateRegistry(newRegistry)){
-                        successScaffoldMsg(context, "Registro guardado exitosamente");
-                      } else {
-                        scaffoldErrorMsg(context, "No se pudo guardar el registro");
-                      }
+                      
+                      await updateRegistry(newRegistry).then((val){
+                        if(val){
+                          successScaffoldMsg(context, "Registro guardado exitosamente");
+                          Navigator.pop(context);
+                        } else {
+                          errorScaffoldMsg(context, "No se pudo guardar el registro");
+                        }
+                      });
                     }
                   },
                 ),

@@ -1,5 +1,4 @@
-import 'package:app_fintes/business_logic/models/account_model.dart';
-import 'package:app_fintes/business_logic/data_functions.dart';
+import 'package:app_fintes/business_logic/utilitity_functions.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 

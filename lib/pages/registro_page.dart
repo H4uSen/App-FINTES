@@ -1,6 +1,8 @@
+import 'package:app_fintes/business_logic/models/user_model.dart';
 import 'package:app_fintes/business_logic/user_functions.dart';
 import 'package:app_fintes/widgets/custom.dart';
 import 'package:app_fintes/widgets/scaffoldmsgs.dart';
+import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 
 class RegistroPage extends StatefulWidget {
@@ -74,7 +76,7 @@ class RegistroPageState extends State<RegistroPage> {
                         if (valor == null || valor.isEmpty) {
                           return 'El correo es obligatorio';
                         }
-                        if ("@".allMatches(valor,0).length > 1) return 'Ingrese un correo válido';
+                        if ("@".allMatches(valor,0).length != 1) return 'Ingrese un correo válido';
                         return null;
                       },
                     ),
@@ -85,7 +87,7 @@ class RegistroPageState extends State<RegistroPage> {
                           return 'Ingrese una contraseña';
                         }
                         if (valor.length < 6) {
-                          return 'La contraseña debe tener al menos 6 caracteres';
+                          return 'Debe tener al menos 6 caracteres';
                         }
                         return null;
                       },
@@ -138,21 +140,34 @@ class RegistroPageState extends State<RegistroPage> {
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (!formkey.currentState!.validate()) return;
 
-                        bool isregistered = register(
-                          nombreController.text,
-                          correoController.text,
-                          contraseniaController.text,
-                        );
-                        if(isregistered){
-                          successScaffoldMsg(context, 'Usuario registrado exitosamente');
-                          Navigator.pushReplacementNamed(context, '/principal');
+                        await getUserByEmail(correoController.text).then((val){
+                          if(val == null){
+                            register(User(
+                              name: nombreController.text,
+                              email: correoController.text,
+                              password: contraseniaController.text,
+                            ))
+                              .then((val)=>{
+                                if(val){
+                                  successScaffoldMsg(
+                                    context, 
+                                    'Usuario registrado correctamente',
+                                    backgroundColor: CustomColors.darkBlue,
+                                    textColor: CustomColors.white
+                                  ),
+                                  Navigator.pushNamed(context, '/principal')
+                                }else{
+                                  errorScaffoldMsg(context, 'Error al registrar el usuario')
+                                }
+                              });
+                          }else{
+                            errorScaffoldMsg(context, 'El correo ya está registrado');
+                          }
                           
-                        } else {
-                          scaffoldErrorMsg(context, 'El correo ya está registrado');
-                        }
+                        });
                       },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 15),

@@ -1,8 +1,13 @@
+import 'package:app_fintes/business_logic/account_functions.dart';
 import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/business_logic/data_functions.dart';
+import 'package:app_fintes/business_logic/goal_functions.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
+import 'package:app_fintes/business_logic/models/goal_model.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
 import 'package:app_fintes/business_logic/models/user_model.dart';
+import 'package:app_fintes/business_logic/recurrent_functions.dart';
+import 'package:app_fintes/business_logic/registry_functions.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
 import 'package:app_fintes/pages/drawer.dart';
 import 'package:app_fintes/widgets/home/goal_card.dart';
@@ -28,10 +33,10 @@ class _InicioPageState extends State<InicioPage> {
   }
   User user = globalUser!;
   List<Registry> allRegistries = getAllUserRegistries(user.id);
-  List<Account> goalAccounts = getUserGoals(user.id);
+  List<Goal> goalAccounts = getUserGoals(user.id);
 
     return Scaffold(
-      drawer: const CustomDrawer(),
+      drawer: CustomDrawer(),
       appBar: AppBar(
         title:  const Text(
           'Inicio',
@@ -52,12 +57,12 @@ class _InicioPageState extends State<InicioPage> {
                   scrollDirection: Axis.horizontal,
                   itemCount: goalAccounts.length,
                   itemBuilder: (context, index) {
-                      double goal = goalAccounts[index].goalAmount ?? 0;
-                      double collected = getAccountCollected(user.id, goalAccounts[index].accountId);
+                      double goal = goalAccounts[index].goalAmount;
+                      double collected = getGoalCollected(user.id, goalAccounts[index].goalId);
                       return SizedBox(
                         width: 300,
                         child: GoalCard(
-                          title: goalAccounts[index].accountName,
+                          title: goalAccounts[index].goalName,
                           row1: 'Objetivo:',
                           row2: 'Reunido:',
                           row3: 'Restante:',
@@ -65,7 +70,9 @@ class _InicioPageState extends State<InicioPage> {
                           money2: collected,
                           money3: goal - collected,
                           onTap: (){
-                            Navigator.pushNamed(context, '/accountdetails', arguments: goalAccounts[index]);
+                            Navigator.pushNamed(context, 
+                              '/accountdetails', 
+                              arguments: [goalAccounts[index].accountType, goalAccounts[index].goalId, goalAccounts[index].goalName]);
                           },
                           showLeadingButton: true,
                         ),
@@ -90,7 +97,7 @@ class _InicioPageState extends State<InicioPage> {
                 return RecentActivityTile(
                 title: allRegistries[index].title,
                 description: allRegistries[index].description,
-                account: accountName ?? 'No se encontró la cuenta',  
+                account: accountName,  
                 amount: allRegistries[index].amount,
                 isDeposit: allRegistries[index].isDeposit,
                 onTap: (){
@@ -109,7 +116,7 @@ class _InicioPageState extends State<InicioPage> {
           
       
       floatingActionButton: Visibility(
-        visible: getUserAccounts(globalUser!.id).isNotEmpty,
+        visible: getUserGoals(globalUser!.id).isNotEmpty || getUserAccounts(globalUser!.id).isNotEmpty|| getUserRecurrents(globalUser!.id).isNotEmpty,
         child: FloatingActionButton(
           onPressed: (){
             //TODO:Poner la navegacion a la pagina de agregar registro
