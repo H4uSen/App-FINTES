@@ -9,7 +9,16 @@ import 'package:app_fintes/pages/registrydetails_page.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+// Import the generated file
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MainApp());
 }
 
@@ -27,7 +36,7 @@ class MainApp extends StatelessWidget {
         '/login': (context) => const LoginPage(),
         '/registro': (context) => const RegistroPage(),
         '/home': (context) => const InicioPage(),
-        '/registrydetails': (context) => RegistrydetailsPage(),
+        '/registrydetails': (context) => const RegistrydetailsPage(),
         '/accountdetails': (context) => const AccountDetailsPage(),
         '/accountmanagement': (context) => const GestionCuentas(),
       },
