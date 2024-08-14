@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "48312127542",
+    "project_id": "fintes-services",
+    "storage_bucket": "fintes-services.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48312127542:android:378e98015753a3f78dc897",
+        "android_client_info": {
+          "package_name": "com.aela.fintes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgZQJPziI7r9gS-mAwqvt4mf-Sbu-x2Nw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
