@@ -5,14 +5,16 @@ class Goal {
   final String goalId;
   final String goalName;
   final double goalAmount;
+  double goalCollected;
   final String ownerId;
   final String accountType;
-  const Goal({
+  Goal({
     required this.ownerId,
     this.goalId ="",
     this.accountType = AccountType.goal,
     required this.goalName,
     required this.goalAmount,
+    this.goalCollected = 0.0,
   });
 
   factory Goal.fromJson(Map<String, dynamic> json, String id) {

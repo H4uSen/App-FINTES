@@ -229,6 +229,8 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                         description: descriptionController!.text,
                         amount: double.parse(amountController!.text),
                         accountId: selectedAccount!,
+                        //hay que cambiar esto, el accounttype debe ser el tipo de cuenta
+                        accountType: '',
                         ownerId: globalUser!.id,
                         isDeposit: (selectedType == 'Ingreso'),
                         date: registry.date,

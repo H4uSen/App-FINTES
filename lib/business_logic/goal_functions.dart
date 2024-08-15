@@ -1,5 +1,6 @@
 
 import 'package:app_fintes/business_logic/models/goal_model.dart';
+import 'package:app_fintes/business_logic/models/registry_model.dart';
 import 'package:app_fintes/business_logic/registry_functions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -35,9 +36,10 @@ Future<List<Goal>> getUserGoalsTest(String userId)  async {
 }
 
 
-double getGoalCollected (String userId, String goalId) {
+Future<double> getGoalCollected (String userId, String goalId) async {
   double collected = 0;
   collected = getAccountDeposits(userId, goalId);
   collected -= getAccountWithdrawals(userId, goalId);
   return collected;
 }
+

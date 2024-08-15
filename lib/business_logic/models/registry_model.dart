@@ -8,12 +8,16 @@ class Registry {
   final bool isDeposit;
   final String date;
 
+  String accountName = '';
+  String accountType; 
+
   Registry({
     required this.ownerId,
     this.registryId = "",
     required this.title,
     required this.description,
     required this.accountId,
+    required this.accountType,
     required this.amount,
     required this.isDeposit,
     required this.date,
@@ -26,7 +30,8 @@ class Registry {
       title: json['title'],
       description: json['description'],
       accountId: json['accountId'],
-      amount: json['amount'],
+      accountType: json['accountType'],
+      amount: double.parse(json['amount'].toString()),
       isDeposit: json['isDeposit'],
       date: json['date'],
     );
@@ -38,6 +43,7 @@ class Registry {
       'title': title,
       'description': description,
       'accountId': accountId,
+      'accountType': accountType,
       'amount': amount,
       'isDeposit': isDeposit,
       'date': date,

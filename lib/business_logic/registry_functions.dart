@@ -1,7 +1,10 @@
 import 'dart:ffi';
 
+import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 List<Registry> getAccountRegistries(String userId, String accountId) {
   List<Registry> registries = [];
@@ -103,6 +106,20 @@ String getAccountNameById (String accountId) {
     });
   return accountName;
 }
+
+Future<String> getAccountName (String accountId,String type) async {
+  String accountName = '';
+  String collection = type == AccountType.account ? 'Accounts' : type == AccountType.goal ? 'Goals' : 'Recurrents';
+  await FirebaseFirestore.instance.collection(collection)
+    .where('type', isEqualTo: type)
+    .get()
+    .then((value) {
+      accountName = value.docs.first.data()["name"].toString();
+    });
+  return accountName;
+}
+
+
 
 Future<bool> deleteRegistry(String registryId) async {
   FirebaseFirestore.instance.collection('Registries')
