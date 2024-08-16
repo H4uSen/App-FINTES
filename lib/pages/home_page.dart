@@ -26,7 +26,6 @@ class InicioPage extends StatefulWidget {
 class _InicioPageState extends State<InicioPage> {
   
   
-//TODO: Hay que hacer que la pantalla home se actualice cada vez que se agrega un nuevo registro por medio del boton flotante
   @override
   Widget build(BuildContext context) {
   if(globalUser == null) {
@@ -66,10 +65,8 @@ class _InicioPageState extends State<InicioPage> {
         return element.accountId == goal.goalId && element.ownerId == user.id;
       });
       for(var registry in goalRegistries){
-        print(registry.amount); 
         collected += registry.amount;
       }
-      print(goal.goalCollected);
       goal.goalCollected = collected;
     }
 
@@ -87,10 +84,9 @@ class _InicioPageState extends State<InicioPage> {
         ),
         centerTitle: true,
       ),
-      //TODO: Hacer que se vea un mensaje de vacio si no hay metas o registros
       body: Column(
         children: [
-
+          const CustomDivider(title: 'Resumen de metas'),
           FutureBuilder(
             future: fetchData(user.id),
             builder: (context, snapshot) {
@@ -112,7 +108,7 @@ class _InicioPageState extends State<InicioPage> {
                 height: 300,
                 child: Column(
                   children: [
-                    const CustomDivider(title: 'Resumen de metas'),
+                    
                     Visibility(
                       visible: goalAccounts.isEmpty,
                       child: const CustomDivider(title: "Vacío", showLines: false),
@@ -124,7 +120,7 @@ class _InicioPageState extends State<InicioPage> {
                             itemCount: goalAccounts.length,
                             itemBuilder: (context, index) {
                                 double goal = goalAccounts[index].goalAmount;
-                                double collected = goalAccounts[index].goalCollected; //TODO: Hay que hacer que collected sea el valor de la meta que se ha reunido
+                                double collected = goalAccounts[index].goalCollected;
                                 return SizedBox(
                                   width: 300,
                                   child: GoalCard(
@@ -199,72 +195,6 @@ class _InicioPageState extends State<InicioPage> {
               );
               
             }),
-          
-
-          // const CustomDivider(title: 'Resumen de metas'),
-          // Visibility(
-          //   visible: goalAccounts.isEmpty,
-          //   child: const CustomDivider(title: "Vacío", showLines: false),
-          //   ),
-          // SizedBox(
-          //   height: 280,
-          //   child: ListView.builder(
-          //         scrollDirection: Axis.horizontal,
-          //         itemCount: goalAccounts.length,
-          //         itemBuilder: (context, index) {
-          //             double goal = goalAccounts[index].goalAmount;
-          //             double collected = getGoalCollected(user.id, goalAccounts[index].goalId);
-          //             return SizedBox(
-          //               width: 300,
-          //               child: GoalCard(
-          //                 title: goalAccounts[index].goalName,
-          //                 row1: 'Objetivo:',
-          //                 row2: 'Reunido:',
-          //                 row3: 'Restante:',
-          //                 money1: goal,
-          //                 money2: collected,
-          //                 money3: goal - collected,
-          //                 onTap: (){
-          //                   Navigator.pushNamed(context, 
-          //                     '/accountdetails', 
-          //                     arguments: [goalAccounts[index].accountType, goalAccounts[index].goalId, goalAccounts[index].goalName]);
-          //                 },
-          //                 showLeadingButton: true,
-          //               ),
-          //             );
-                    
-          //         },
-          //       ),
-          // ),
-
-          
-
-          // const CustomDivider(title: 'Actividades recientes'),
-          // Visibility(
-          //   visible: allRegistries.isEmpty,
-          //   child: const CustomDivider(title: "Vacío", showLines: false),
-          //   ),
-          // Expanded(
-          //   child: ListView.builder(
-          //   itemCount: allRegistries.length,
-          //   itemBuilder: (context, index) {
-          //       String? accountName = getAccountNameById(allRegistries[index].accountId);
-          //       return RecentActivityTile(
-          //       title: allRegistries[index].title,
-          //       description: allRegistries[index].description,
-          //       account: accountName,  
-          //       amount: allRegistries[index].amount,
-          //       isDeposit: allRegistries[index].isDeposit,
-          //       onTap: (){
-          //         Navigator.pushNamed(context, '/registrydetails', arguments: allRegistries[index]);
-          //       },
-          //     );
-              
-          //   },
-          // ),
-          //),
-          
-
         ],
       ),
 
@@ -275,7 +205,7 @@ class _InicioPageState extends State<InicioPage> {
         visible: true,
         child: FloatingActionButton(
           onPressed: () {
-
+            Navigator.pushNamed(context, '/newregistry');
             //TODO:Poner la navegacion a la pagina de agregar registro
           },
           backgroundColor: CustomColors.black,

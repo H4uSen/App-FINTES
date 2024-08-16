@@ -2,6 +2,7 @@
 import 'package:app_fintes/pages/accountdetails_page.dart';
 import 'package:app_fintes/pages/acctmanagement_page.dart';
 import 'package:app_fintes/pages/home_page.dart';
+import 'package:app_fintes/pages/newregistry_page.dart';
 import 'package:app_fintes/pages/principal_page.dart';
 import 'package:app_fintes/pages/login_page.dart';
 import 'package:app_fintes/pages/registro_page.dart';
@@ -39,6 +40,7 @@ class MainApp extends StatelessWidget {
         '/registrydetails': (context) => const RegistrydetailsPage(),
         '/accountdetails': (context) => const AccountDetailsPage(),
         '/accountmanagement': (context) => const GestionCuentas(),
+        '/newregistry': (context) => const NewRegistryPage(),
       },
       onGenerateRoute: (settings) => MaterialPageRoute(
         builder: (context) => const PrincipalPage(),

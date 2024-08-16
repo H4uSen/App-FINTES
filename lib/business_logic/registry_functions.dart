@@ -1,10 +1,6 @@
-import 'dart:ffi';
-
 import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 List<Registry> getAccountRegistries(String userId, String accountId) {
   List<Registry> registries = [];
@@ -119,7 +115,17 @@ Future<String> getAccountName (String accountId,String type) async {
   return accountName;
 }
 
-
+Future<bool> createRegistry(Registry registry) async {
+  FirebaseFirestore.instance.collection('Registries')
+    .add(registry.toJson())
+    .then((value) {
+      return true;
+    })
+    .catchError((error){
+      return false;
+    });
+    return true;
+}
 
 Future<bool> deleteRegistry(String registryId) async {
   FirebaseFirestore.instance.collection('Registries')

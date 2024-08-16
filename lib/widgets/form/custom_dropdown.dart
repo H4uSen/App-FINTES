@@ -13,7 +13,7 @@ class CustomDropDown extends StatelessWidget {
 
   final bool isEditable;
   final String labeltext;
-  final String value;
+  final String? value;
   final void Function(String?)? onChanged;
   final List<DropdownMenuItem<String>> options;
 
