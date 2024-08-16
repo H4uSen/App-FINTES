@@ -232,6 +232,7 @@ class _NewRegistryPage extends State<NewRegistryPage> {
       }
     });
   }).then((value) async{
+    //TODO:Quitar los Recurrents de las opciones de cuenta para los registro que vienen de Home
     await recurrentsRef.where("ownerId",isEqualTo: userId).get().then((value) {
       for (var doc in value.docs){
         Map<String,String> account = {

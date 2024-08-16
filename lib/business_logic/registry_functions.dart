@@ -2,7 +2,7 @@ import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-List<Registry> getAccountRegistries(String userId, String accountId) {
+Future<List<Registry>> getAccountRegistries(String userId, String accountId) async {
   List<Registry> registries = [];
   FirebaseFirestore.instance.collection('Registries')
     .where('ownerId', isEqualTo: userId)
@@ -19,6 +19,24 @@ List<Registry> getAccountRegistries(String userId, String accountId) {
 }
 
 double getAccountDeposits (String userId, String accountId) {
+  double deposits = 0;
+  FirebaseFirestore.instance.collection('Registries')
+    .where('ownerId', isEqualTo: userId)
+    .where('accountId', isEqualTo: accountId)
+    .get()
+    .then((value) {
+      for (var doc in value.docs){
+        Registry registry = Registry.fromJson(doc.data(), doc.id);
+        if(registry.isDeposit) {
+          deposits += registry.amount;
+        }
+      }
+    })
+    .catchError((error){});
+  return deposits;
+}
+
+Future<double> getAccountDepositsTest (String userId, String accountId) async {
   double deposits = 0;
   FirebaseFirestore.instance.collection('Registries')
     .where('ownerId', isEqualTo: userId)
@@ -137,7 +155,7 @@ Future<bool> deleteRegistry(String registryId) async {
     .catchError((error){
       return false;
     });
-  return false;
+  return true;
 }
 
 Future<bool> updateRegistry(Registry registry) async {

@@ -197,7 +197,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                     await deleteRegistry(registry.registryId).then((val){
                       if(val){
                         successScaffoldMsg(context, "Registro eliminado exitosamente");
-                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context, '/home');
                       } else {
                         errorScaffoldMsg(context, "No se pudo eliminar el registro");
                       }
@@ -229,7 +229,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                         description: descriptionController!.text,
                         amount: double.parse(amountController!.text),
                         accountId: selectedAccount!,
-                        //hay que cambiar esto, el accounttype debe ser el tipo de cuenta
+                        //TODO: hay que cambiar esto, el accounttype debe ser el tipo de cuenta
                         accountType: '',
                         ownerId: globalUser!.id,
                         isDeposit: (selectedType == 'Ingreso'),
