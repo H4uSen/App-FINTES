@@ -9,10 +9,11 @@ class RecurrentPayment {
   final bool isDeposit;
   final String ownerId;
   final String accountId;
-  final String accountType = AccountType.recurrentPayment;
+  String accountType;
 
-  const RecurrentPayment({
+  RecurrentPayment({
     required this.accountId,
+    this.accountType = AccountType.recurrentPayment,
     required this.ownerId,
     required this.isDeposit,
     this.recurrentId = "",
@@ -23,10 +24,11 @@ class RecurrentPayment {
   factory RecurrentPayment.fromJson(Map<String, dynamic> json, String id) {
     return RecurrentPayment(
       accountId: json['accountId'],
+      accountType: json['type'],
       ownerId: json['ownerId'],
       recurrentId: id,
-      recurrentName: json['recurrentName'],
-      recurrentAmount: json['recurrentAmount'],
+      recurrentName: json['name'].toString(),
+      recurrentAmount: double.parse(json['amount'].toString()),
       isDeposit: json['isDeposit'],
     );
   }
@@ -34,10 +36,12 @@ class RecurrentPayment {
   Map<String, dynamic> toJson() {
     return {
       'accountId': accountId,
+      'accountType': accountType,
       'ownerId': ownerId,
       'recurrentName': recurrentName,
       'recurrentAmount': recurrentAmount,
       'isDeposit': isDeposit,
+
     };
   }
 }

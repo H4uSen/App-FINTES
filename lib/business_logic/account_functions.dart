@@ -1,4 +1,3 @@
-import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

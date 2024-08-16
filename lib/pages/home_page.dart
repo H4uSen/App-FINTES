@@ -33,48 +33,9 @@ class _InicioPageState extends State<InicioPage> {
   }
   User user = globalUser!;
 
-  final goalsRef = FirebaseFirestore.instance.collection('Goals');
-  final registriesRef = FirebaseFirestore.instance.collection('Registries');
   //bool hasGoals = false;
   bool hasRegistries = false;
     
-  Future<Map<String, dynamic>> fetchData (String userId) async {
-    List<Goal> goals = [];
-    List<Registry> allRegistries = [];
-    
-    await goalsRef.where('ownerId', isEqualTo: userId).get().then((value) async{
-      for (var doc in value.docs){
-        Goal goal = Goal.fromJson(doc.data(), doc.id);
-        goals.add(goal);
-      }
-    }).catchError((error){});
-
-    await registriesRef.where("ownerId",isEqualTo: user.id).get().then((value) async{
-      for (var doc in value.docs){
-        Registry registry = Registry.fromJson(doc.data(), doc.id);
-        final accountName = await getAccountName(registry.accountId,registry.accountType);
-        registry.accountName = accountName;
-        allRegistries.add(registry);
-      }
-    }).catchError((error){});
-
-    //Para traer el monto reunido de las metas
-    for(var goal in goals){
-      double collected = 0;
-      final goalRegistries = allRegistries.where((element){
-        return element.accountId == goal.goalId && element.ownerId == user.id;
-      });
-      for(var registry in goalRegistries){
-        collected += registry.amount;
-      }
-      goal.goalCollected = collected;
-    }
-
-    //hasGoals = goals.isNotEmpty;
-    hasRegistries = allRegistries.isNotEmpty;
-
-    return {'goals': goals, 'registries': allRegistries};
-  }
 
     return Scaffold(
       drawer: CustomDrawer(),
@@ -101,7 +62,7 @@ class _InicioPageState extends State<InicioPage> {
               if (data == null) {
                 return const Text('No hay documentos');
               }
-
+              hasRegistries = data['registries'].isNotEmpty;
               final goalAccounts = data['goals'] as List<Goal>;
               
               return SizedBox(
@@ -155,8 +116,6 @@ class _InicioPageState extends State<InicioPage> {
             visible: hasRegistries,
             child: const CustomDivider(title: "Vacío", showLines: false),
             ),
-
-
           FutureBuilder(
             future: fetchData(user.id), 
             builder:(context, snapshot){
@@ -197,16 +156,13 @@ class _InicioPageState extends State<InicioPage> {
             }),
         ],
       ),
-
           
       
       floatingActionButton: Visibility(
-        //TODO: Hacer que el boton flotante sea visible solo si el usuario esta logeado
         visible: true,
         child: FloatingActionButton(
           onPressed: () {
             Navigator.pushNamed(context, '/newregistry');
-            //TODO:Poner la navegacion a la pagina de agregar registro
           },
           backgroundColor: CustomColors.black,
           child: const Icon(Icons.add, color: CustomColors.white,)
@@ -216,3 +172,44 @@ class _InicioPageState extends State<InicioPage> {
   }
 }
 
+
+Future<Map<String, dynamic>> fetchData (String userId) async {
+  
+  final goalsRef = FirebaseFirestore.instance.collection('Goals');
+  final registriesRef = FirebaseFirestore.instance.collection('Registries');
+    List<Goal> goals = [];
+    List<Registry> allRegistries = [];
+    
+    await goalsRef.where('ownerId', isEqualTo: userId).get().then((value) async{
+      for (var doc in value.docs){
+        Goal goal = Goal.fromJson(doc.data(), doc.id);
+        goals.add(goal);
+      }
+    }).catchError((error){});
+
+    await registriesRef.where("ownerId",isEqualTo: globalUser!.id).get().then((value) async{
+      for (var doc in value.docs){
+        Registry registry = Registry.fromJson(doc.data(), doc.id);
+        final accountName = await getAccountName(registry.accountId,registry.accountType);
+        registry.accountName = accountName;
+        allRegistries.add(registry);
+      }
+    }).catchError((error){});
+
+    //Para traer el monto reunido de las metas
+    for(var goal in goals){
+      double collected = 0;
+      final goalRegistries = allRegistries.where((element){
+        return element.accountId == goal.goalId && element.ownerId == globalUser!.id;
+      });
+      for(var registry in goalRegistries){
+        collected += registry.amount;
+      }
+      goal.goalCollected = collected;
+    }
+
+    //hasGoals = goals.isNotEmpty;
+    //hasRegistries = allRegistries.isNotEmpty;
+
+    return {'goals': goals, 'registries': allRegistries};
+  }

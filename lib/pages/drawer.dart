@@ -28,7 +28,6 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   @override
   Widget build(BuildContext context) {
-
     // final List<Account> accounts = getUserAccounts(globalUser!.id);
     bool hasAccounts = widget.accounts.isEmpty;
     // List<Account> goals = getUserGoals(globalUser!.id);
