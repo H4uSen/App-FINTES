@@ -194,6 +194,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                     ),
                   ),
                   onPressed: () async{
+                    //TODO: Agregar confirmar si se desea eliminar el registro
                     await deleteRegistry(registry.registryId).then((val){
                       if(val){
                         successScaffoldMsg(context, "Registro eliminado exitosamente");

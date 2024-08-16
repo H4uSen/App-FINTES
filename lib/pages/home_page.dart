@@ -8,6 +8,7 @@ import 'package:app_fintes/business_logic/models/registry_model.dart';
 import 'package:app_fintes/business_logic/models/user_model.dart';
 import 'package:app_fintes/business_logic/recurrent_functions.dart';
 import 'package:app_fintes/business_logic/registry_functions.dart';
+import 'package:app_fintes/business_logic/utilitity_functions.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
 import 'package:app_fintes/pages/drawer.dart';
 import 'package:app_fintes/widgets/home/goal_card.dart';
@@ -75,7 +76,7 @@ class _InicioPageState extends State<InicioPage> {
                       child: const CustomDivider(title: "Vacío", showLines: false),
                       ),
                     SizedBox(
-                      height: 250,
+                      height: 300,
                       child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: goalAccounts.length,
@@ -96,6 +97,8 @@ class _InicioPageState extends State<InicioPage> {
                                       Navigator.pushNamed(context, 
                                         '/accountdetails', 
                                         arguments: [goalAccounts[index].accountType, goalAccounts[index].goalId, goalAccounts[index].goalName]);
+                                        setSelectedDrawerOption(goalAccounts[index].goalName);
+                                        setState(() {});
                                     },
                                     showLeadingButton: true,
                                   ),
@@ -180,6 +183,7 @@ Future<Map<String, dynamic>> fetchData (String userId) async {
     List<Goal> goals = [];
     List<Registry> allRegistries = [];
     
+    
     await goalsRef.where('ownerId', isEqualTo: userId).get().then((value) async{
       for (var doc in value.docs){
         Goal goal = Goal.fromJson(doc.data(), doc.id);
@@ -198,14 +202,21 @@ Future<Map<String, dynamic>> fetchData (String userId) async {
 
     //Para traer el monto reunido de las metas
     for(var goal in goals){
-      double collected = 0;
-      final goalRegistries = allRegistries.where((element){
-        return element.accountId == goal.goalId && element.ownerId == globalUser!.id;
-      });
-      for(var registry in goalRegistries){
-        collected += registry.amount;
-      }
-      goal.goalCollected = collected;
+      await registriesRef.where('ownerId', isEqualTo: userId).where('accountId', isEqualTo: goal.goalId).get()
+        .then((value) {
+          double deposits = 0;
+          double withdrawals = 0;
+          for (var doc in value.docs){
+            Registry registry = Registry.fromJson(doc.data(), doc.id);
+            if(registry.isDeposit) {
+              deposits += registry.amount;
+            } else {
+              withdrawals += registry.amount;
+            }
+          }
+          goal.goalCollected = deposits - withdrawals;
+        })
+        .catchError((error){});
     }
 
     //hasGoals = goals.isNotEmpty;
