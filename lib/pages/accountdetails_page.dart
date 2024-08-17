@@ -12,15 +12,20 @@ import 'package:app_fintes/pages/drawer.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
 import 'package:app_fintes/widgets/home/goal_card.dart';
 import 'package:app_fintes/widgets/home/recentactivity_tile.dart';
+import 'package:app_fintes/widgets/scaffoldmsgs.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 
-class AccountDetailsPage extends StatelessWidget {
+class AccountDetailsPage extends StatefulWidget {
   const AccountDetailsPage({super.key});
 
+  @override
+  State<AccountDetailsPage> createState() => _AccountDetailsPageState();
+}
 
+class _AccountDetailsPageState extends State<AccountDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final registriesRef = FirebaseFirestore.instance.collection('Registries');
@@ -197,11 +202,45 @@ class AccountDetailsPage extends StatelessWidget {
             ),
         ],
       ),
+      
       floatingActionButton: Visibility(
         visible: true,
         child: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/newregistry', arguments: [argAccountId, argAccountType, argAccountName]);
+            if(argAccountType != AccountType.recurrentPayment){
+              Navigator.pushNamed(context, '/newregistry', arguments: [argAccountId, argAccountType, argAccountName]);
+            }else{
+              final recurrentRef = FirebaseFirestore.instance.collection('Recurrents');
+              recurrentRef.doc(argAccountId).get()
+                .then((value) async{
+                  if(value.data() != null){
+                    RecurrentPayment recurrent = RecurrentPayment.fromJson(value.data()!, value.id);
+                    Registry newRecurrent = Registry(
+                      ownerId: globalUser!.id,
+                      accountId: argAccountId,
+                      accountType: AccountType.recurrentPayment,
+                      title: "${recurrent.recurrentName}-${formattedDate(DateTime.now())}" ,
+                      description: "Pago de ${recurrent.recurrentName}",
+                      amount: recurrent.recurrentAmount,
+                      isDeposit: recurrent.isDeposit,
+                      date: formattedDate(DateTime.now())
+                    );
+                    await createRegistry(newRecurrent).then((val){
+                        if(val){
+                          successScaffoldMsg(context, "Registro guardado exitosamente");
+                          setState(() {
+                            
+                          });
+                        } else {
+                          errorScaffoldMsg(context, "No se pudo guardar el registro");
+                        }
+                      });
+                    
+                  }
+                })
+                .catchError((error){});
+
+            }
           },
           backgroundColor: CustomColors.black,
           child: const Icon(Icons.add, color: CustomColors.white,)

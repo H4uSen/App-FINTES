@@ -168,5 +168,5 @@ Future<bool> updateRegistry(Registry registry) async {
     .catchError((error){
       return false;
     });
-  return false;
+  return true;
 }

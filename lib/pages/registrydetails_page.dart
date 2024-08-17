@@ -7,10 +7,12 @@ import 'package:app_fintes/business_logic/models/recurrent_model.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
 import 'package:app_fintes/business_logic/recurrent_functions.dart';
 import 'package:app_fintes/business_logic/registry_functions.dart';
+import 'package:app_fintes/business_logic/utilitity_functions.dart';
 import 'package:app_fintes/widgets/scaffoldmsgs.dart';
 import 'package:app_fintes/widgets/form/custom_dropdown.dart';
 import 'package:app_fintes/widgets/form/custom_textformfield.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class RegistrydetailsPage extends StatefulWidget {
@@ -21,9 +23,11 @@ class RegistrydetailsPage extends StatefulWidget {
 }
 
 class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
+  late Future<List<Map<String, dynamic>>> accountsFuture;
   @override
   void initState() {
     super.initState();
+    accountsFuture = getAccounts(globalUser!.id);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Registry registry = ModalRoute.of(context)!.settings.arguments as Registry;
       titleController!.text = registry.title;
@@ -148,15 +152,47 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
               },
             ),
 
-            CustomDropDown(
-              isEditable: isEditable,
-              labeltext: 'Cuenta:',
-              value: registry.accountId,
-              options: accountOptions,
-              onChanged: (val){
-                selectedAccount = val!;
+            // CustomDropDown(
+            //   isEditable: isEditable,
+            //   labeltext: 'Cuenta:',
+            //   value: registry.accountId,
+            //   options: accountOptions,
+            //   onChanged: (val){
+            //     selectedAccount = val!;
+            //   },
+            // ),
+
+            FutureBuilder(
+              future: accountsFuture,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                
+                
+                final response = snapshotValidation(snapshot);
+                if(response != null) return response;
+
+                final accounts = snapshot.data;
+
+                accountOptions = [
+                  for (var account in accounts)
+                    DropdownMenuItem<String>(
+                      value: account["accountId"] + "-" + account["accountType"],
+                      child: Text(account["accountName"].toString()),
+                    ) 
+                ];
+                selectedAccount = "${registry.accountId}-${registry.accountType}";
+
+                return CustomDropDown(
+                  isEditable: isEditable,
+                  labeltext: 'Cuenta:',
+                  value: selectedAccount,
+                  options: accountOptions,
+                  onChanged: (val){
+                    selectedAccount = val!;
+                  },
+                );
               },
             ),
+
 
             CustomDropDown(
               isEditable: isEditable,
@@ -194,15 +230,40 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                     ),
                   ),
                   onPressed: () async{
-                    //TODO: Agregar confirmar si se desea eliminar el registro
-                    await deleteRegistry(registry.registryId).then((val){
-                      if(val){
-                        successScaffoldMsg(context, "Registro eliminado exitosamente");
-                        Navigator.pushReplacementNamed(context, '/home');
-                      } else {
-                        errorScaffoldMsg(context, "No se pudo eliminar el registro");
-                      }
-                    });
+                    showDialog(
+                      context: context, 
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Confirmación',),
+                          
+                          content: const Text('¿Desea eliminar este registro?',),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              }, 
+                              child: const Text('Cancelar')
+                            ),
+                            TextButton(
+                              onPressed: () async{
+                                Navigator.pop(context, true);
+                                await deleteRegistry(registry.registryId).then((val){
+                                  if(val){
+                                    successScaffoldMsg(context, "Registro eliminado exitosamente");
+                                    Navigator.pushReplacementNamed(context, '/home');
+                                  } else {
+                                    errorScaffoldMsg(context, "No se pudo eliminar el registro");
+                                  }
+                                });
+                              }, 
+                              child: const Text('Eliminar')
+                            ),
+                          ],
+                        );
+                      },
+                      );
+
+                    
                   },
                 ),
               ),
@@ -229,22 +290,45 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                         title: titleController!.text,
                         description: descriptionController!.text,
                         amount: double.parse(amountController!.text),
-                        accountId: selectedAccount!,
-                        //TODO: hay que cambiar esto, el accounttype debe ser el tipo de cuenta
-                        accountType: '',
+                        accountId: selectedAccount!.split("-")[0],
+                        accountType: selectedAccount!.split("-")[1],
                         ownerId: globalUser!.id,
                         isDeposit: (selectedType == 'Ingreso'),
                         date: registry.date,
                       );
+                      showDialog(
+                        context: context, 
+                        builder: 
+                        (context) {
+                          return AlertDialog(
+                            title: const Text('Confirmación',),
+                            content: const Text('¿Desea guardar los cambios?',),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                }, 
+                                child: const Text('Cancelar')
+                              ),
+                              TextButton(
+                                onPressed: () async{
+                                  Navigator.pop(context, true);
+                                  await updateRegistry(newRegistry).then((val){
+                                    if(val){
+                                      successScaffoldMsg(context, "Registro guardado exitosamente");
+                                      Navigator.pop(context);
+                                    } else {
+                                      errorScaffoldMsg(context, "No se pudo guardar el registro");
+                                    }
+                                  });
+                                }, 
+                                child: const Text('Guardar')
+                              ),
+                            ],
+                          );
+                        },);
                       
-                      await updateRegistry(newRegistry).then((val){
-                        if(val){
-                          successScaffoldMsg(context, "Registro guardado exitosamente");
-                          Navigator.pop(context);
-                        } else {
-                          errorScaffoldMsg(context, "No se pudo guardar el registro");
-                        }
-                      });
+                      
                     }
                   },
                 ),
@@ -258,3 +342,44 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
     );
   }
 }
+
+  Future<List<Map<String, dynamic>>> getAccounts (String userId) async {
+  List<Map<String,dynamic>> accounts =[];
+  final accountsRef = FirebaseFirestore.instance.collection("Accounts");
+  final goalsRef = FirebaseFirestore.instance.collection("Goals");
+  final recurrentsRef = FirebaseFirestore.instance.collection("Recurrents");
+  await accountsRef.where("ownerId",isEqualTo: userId).get().then((value) {
+    accounts.clear();
+    for (var doc in value.docs){
+      Map<String,String> account = {
+        'accountId': doc.id,
+        'accountName': doc['name'],
+        'accountType': AccountType.account,
+      };
+      accounts.add(account);
+    }
+  }).then((value) async{
+    await goalsRef.where("ownerId",isEqualTo: userId).get().then((value) {
+      for (var doc in value.docs){
+        Map<String,String> account = {
+          'accountId': doc.id,
+          'accountName': doc['name'],
+          'accountType': AccountType.goal
+        };
+        accounts.add(account);
+      }
+    });
+  }).then((value) async{
+    await recurrentsRef.where("ownerId",isEqualTo: userId).get().then((value) {
+      for (var doc in value.docs){
+        Map<String,String> account = {
+          'accountId': doc.id,
+          'accountName': doc['name'],
+          'accountType': AccountType.recurrentPayment
+        };
+        accounts.add(account);
+      }
+    });
+  }).catchError((error){});
+  return accounts;
+  }

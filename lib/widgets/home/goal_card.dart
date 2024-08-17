@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:app_fintes/business_logic/utilitity_functions.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
@@ -112,7 +114,7 @@ class GoalCardRow extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(title, style: descriptionStyle,),
-            Text(fixedCurrency(amount, (showCurrency)?'L.':""), style: descriptionStyle,),
+            Text((showCurrency)?fixedCurrency(amount, (showCurrency)?'L.':""): int.parse(amount.round().toString()).toString(), style: descriptionStyle,),
           ],
         ),
       ),
