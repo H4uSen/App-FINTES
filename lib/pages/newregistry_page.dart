@@ -17,6 +17,9 @@ class NewRegistryPage extends StatefulWidget {
 }
 
 class _NewRegistryPage extends State<NewRegistryPage> {
+  
+
+
   final _formKey = GlobalKey<FormState>();
   bool isEditable = true;
   TextEditingController? titleController = TextEditingController();
@@ -34,8 +37,23 @@ class _NewRegistryPage extends State<NewRegistryPage> {
 
   @override
   Widget build(BuildContext context) {
-  List<DropdownMenuItem<String>> accountOptions = [const DropdownMenuItem<String>(value: "default", child: Text("default") )];
+    String accountName='';
+    String accountId='';
+    String accountType='';
+    bool hasDefaults = false;
 
+    final args = ModalRoute.of(context)!.settings.arguments;
+    if (args != null && args is List<String> && args.length == 3) {
+      accountName = args[2];
+      accountType = args[1];
+      accountId = args[0];
+      hasDefaults = true;
+    }else{
+      hasDefaults = false;
+    }
+  
+  
+  List<DropdownMenuItem<String>> accountOptions = [const DropdownMenuItem<String>(value: "default", child: Text("default") )];
     List<DropdownMenuItem<String>> registryTypeOpts = const [
       DropdownMenuItem<String>(
         value: 'Ingreso',
@@ -51,8 +69,8 @@ class _NewRegistryPage extends State<NewRegistryPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Detalles',
+        title:const Text(
+          'Agregar registro',
         ),
         centerTitle: true,
         leading: IconButton(
@@ -107,10 +125,24 @@ class _NewRegistryPage extends State<NewRegistryPage> {
             FutureBuilder(
               future: accountsFuture,
               builder: (BuildContext context, AsyncSnapshot snapshot) {
+                
+                
                 final response = snapshotValidation(snapshot);
                 if(response != null) return response;
 
                 final accounts = snapshot.data;
+
+                // if(accountType == AccountType.recurrentPayment){
+                //   final recurrentRef = FirebaseFirestore.instance.collection("Recurrents").doc(accountId);
+                //   recurrentRef.get().then((value) {
+                //     if(value.data() != null){
+                //       recurrentPayment = value.data()!['amount'];
+                //       selectedType = value.data()!['isDeposit']?'Ingreso':'Egreso';
+                //       amountController!.text = recurrentPayment.toString();
+                      
+                //     }
+                //   });
+                // }
 
                 accountOptions = [
                   for (var account in accounts)
@@ -119,11 +151,12 @@ class _NewRegistryPage extends State<NewRegistryPage> {
                       child: Text(account["accountName"].toString()),
                     ) 
                 ];
-                selectedAccount = accountOptions[0].value;
+                selectedAccount = (hasDefaults)?"$accountId-$accountType":accountOptions[0].value;
+
                 return CustomDropDown(
-                  isEditable: isEditable,
+                  isEditable: hasDefaults?false:isEditable,
                   labeltext: 'Cuenta:',
-                  value: accountOptions[0].value,
+                  value: (hasDefaults)?"$accountId-$accountType":accountOptions[0].value,
                   options: accountOptions,
                   onChanged: (val){
                     selectedAccount = val!;
@@ -132,6 +165,31 @@ class _NewRegistryPage extends State<NewRegistryPage> {
               },
             ),
 
+            if(accountType == AccountType.recurrentPayment)
+            FutureBuilder(
+              future: FirebaseFirestore.instance.collection("Recurrents").doc(accountId).get(),
+              builder: (context,snapshot) {
+                double recurrentPayment = 0;
+                if(snapshot.hasData){
+                  final data = snapshot.data;
+                  if(data != null){
+                    recurrentPayment = data['amount'];
+                    selectedType = data['isDeposit']?'Ingreso':'Egreso';
+                    // amountController!.text = recurrentPayment.toString();
+                  }
+                }
+                return CustomDropDown(
+                  isEditable: isEditable,
+                  labeltext: 'Tipo:',
+                  value: selectedType,
+                  options: registryTypeOpts,
+                  onChanged: (val){
+                    selectedType = val!;
+                  },
+                );
+              }
+            ),
+            if(accountType != AccountType.recurrentPayment)
             CustomDropDown(
               isEditable: isEditable,
               labeltext: 'Tipo:',
@@ -183,7 +241,9 @@ class _NewRegistryPage extends State<NewRegistryPage> {
                       await createRegistry(newRegistry).then((val){
                         if(val){
                           successScaffoldMsg(context, "Registro guardado exitosamente");
-                          Navigator.pushReplacementNamed(context, "/home");
+                          setState(() {});
+                          (hasDefaults)?Navigator.pop(context):Navigator.pushReplacementNamed(context, "/home");
+                          
                         } else {
                           errorScaffoldMsg(context, "No se pudo guardar el registro");
                         }
@@ -198,6 +258,7 @@ class _NewRegistryPage extends State<NewRegistryPage> {
         
       ),
     )
+    
     );
   }
 }

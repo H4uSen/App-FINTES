@@ -12,6 +12,7 @@ import 'package:app_fintes/pages/drawer.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
 import 'package:app_fintes/widgets/home/goal_card.dart';
 import 'package:app_fintes/widgets/home/recentactivity_tile.dart';
+import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -195,6 +196,16 @@ class AccountDetailsPage extends StatelessWidget {
               },
             ),
         ],
+      ),
+      floatingActionButton: Visibility(
+        visible: true,
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/newregistry', arguments: [argAccountId, argAccountType, argAccountName]);
+          },
+          backgroundColor: CustomColors.black,
+          child: const Icon(Icons.add, color: CustomColors.white,)
+        ),
       ),
     );
   }
