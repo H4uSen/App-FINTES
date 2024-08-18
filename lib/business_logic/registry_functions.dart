@@ -125,10 +125,10 @@ Future<String> getAccountName (String accountId,String type) async {
   String accountName = '';
   String collection = type == AccountType.account ? 'Accounts' : type == AccountType.goal ? 'Goals' : 'Recurrents';
   await FirebaseFirestore.instance.collection(collection)
-    .where('type', isEqualTo: type)
+    .doc(accountId)
     .get()
     .then((value) {
-      accountName = value.docs.first.data()["name"].toString();
+      accountName = value.data()!['name'];
     });
   return accountName;
 }
