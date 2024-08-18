@@ -1,4 +1,3 @@
-import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:flutter/material.dart';
 

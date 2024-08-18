@@ -1,12 +1,7 @@
-import 'package:app_fintes/business_logic/account_functions.dart';
 import 'package:app_fintes/business_logic/data/globals.dart';
-import 'package:app_fintes/business_logic/data_functions.dart';
-import 'package:app_fintes/business_logic/goal_functions.dart';
-import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:app_fintes/business_logic/models/goal_model.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
 import 'package:app_fintes/business_logic/models/user_model.dart';
-import 'package:app_fintes/business_logic/recurrent_functions.dart';
 import 'package:app_fintes/business_logic/registry_functions.dart';
 import 'package:app_fintes/business_logic/utilitity_functions.dart';
 import 'package:app_fintes/widgets/drawer/divider.dart';
@@ -38,7 +33,7 @@ class _InicioPageState extends State<InicioPage> {
   }
   User user = globalUser!;
 
-  bool hasGoals = false;
+  //bool hasGoals = false;
   bool hasRegistries = false;
 
   
@@ -120,7 +115,7 @@ Future<Map<String, dynamic>> fetchData (String userId) async {
               }
               hasRegistries = data['registries'].isNotEmpty;
               final goalAccounts = data['goals'] as List<Goal>;
-              hasGoals = goalAccounts.isNotEmpty;
+              //hasGoals = goalAccounts.isNotEmpty;
               emptyHeight = goalAccounts.isEmpty ? 100 : 265;
               
               return SizedBox(
@@ -249,52 +244,3 @@ Future<Map<String, dynamic>> fetchData (String userId) async {
   }
 }
 
-
-// Future<Map<String, dynamic>> fetchData (String userId) async {
-  
-//   final goalsRef = FirebaseFirestore.instance.collection('Goals');
-//   final registriesRef = FirebaseFirestore.instance.collection('Registries');
-//     List<Goal> goals = [];
-//     List<Registry> allRegistries = [];
-    
-    
-//     await goalsRef.where('ownerId', isEqualTo: userId).get().then((value) async{
-//       for (var doc in value.docs){
-//         Goal goal = Goal.fromJson(doc.data(), doc.id);
-//         goals.add(goal);
-//       }
-//     }).catchError((error){});
-
-//     await registriesRef.where("ownerId",isEqualTo: globalUser!.id).get().then((value) async{
-//       for (var doc in value.docs){
-//         Registry registry = Registry.fromJson(doc.data(), doc.id);
-//         final accountName = await getAccountName(registry.accountId,registry.accountType);
-//         registry.accountName = accountName;
-//         allRegistries.add(registry);
-//       }
-//     }).catchError((error){});
-
-//     //Para traer el monto reunido de las metas
-//     for(var goal in goals){
-//       await registriesRef.where('ownerId', isEqualTo: userId).where('accountId', isEqualTo: goal.goalId).get()
-//         .then((value) {
-//           double deposits = 0;
-//           double withdrawals = 0;
-//           for (var doc in value.docs){
-//             Registry registry = Registry.fromJson(doc.data(), doc.id);
-//             if(registry.isDeposit) {
-//               deposits += registry.amount;
-//             } else {
-//               withdrawals += registry.amount;
-//             }
-//           }
-//           goal.goalCollected = deposits - withdrawals;
-//         })
-//         .catchError((error){});
-//     }
-
-//     //hasGoals = goals.isNotEmpty;
-//     //hasRegistries = allRegistries.isNotEmpty;
-
-//     return {'goals': goals, 'registries': allRegistries};
-//   }

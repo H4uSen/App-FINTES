@@ -1,6 +1,5 @@
 // pages/login_page.dart
 import 'package:app_fintes/business_logic/data/globals.dart';
-import 'package:app_fintes/business_logic/models/user_model.dart';
 import 'package:app_fintes/business_logic/user_functions.dart';
 import 'package:app_fintes/widgets/custom.dart';
 import 'package:app_fintes/widgets/scaffoldmsgs.dart';
@@ -45,7 +44,7 @@ class LoginPageState extends State<LoginPage> {
                 key: formkey,
                 child: Column(
                   children: [
-                    SizedBox(height: 50),
+                    const SizedBox(height: 50),
                     CustomForm(
                       controller: correoController,
                       keyboardType: TextInputType.emailAddress,

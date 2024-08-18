@@ -37,14 +37,14 @@ class _NewRegistryPage extends State<NewRegistryPage> {
 
   @override
   Widget build(BuildContext context) {
-    String accountName='';
+    //String accountName='';
     String accountId='';
     String accountType='';
     bool hasDefaults = false;
 
     final args = ModalRoute.of(context)!.settings.arguments;
     if (args != null && args is List<String> && args.length == 3) {
-      accountName = args[2];
+      //accountName = args[2];
       accountType = args[1];
       accountId = args[0];
       hasDefaults = true;
@@ -133,18 +133,6 @@ class _NewRegistryPage extends State<NewRegistryPage> {
                 final accounts = snapshot.data;
                 
 
-                // if(accountType == AccountType.recurrentPayment){
-                //   final recurrentRef = FirebaseFirestore.instance.collection("Recurrents").doc(accountId);
-                //   recurrentRef.get().then((value) {
-                //     if(value.data() != null){
-                //       recurrentPayment = value.data()!['amount'];
-                //       selectedType = value.data()!['isDeposit']?'Ingreso':'Egreso';
-                //       amountController!.text = recurrentPayment.toString();
-                      
-                //     }
-                //   });
-                // }
-
                 accountOptions = [
                   for (var account in accounts)
                     DropdownMenuItem<String>(
@@ -166,31 +154,6 @@ class _NewRegistryPage extends State<NewRegistryPage> {
               },
             ),
 
-            // if(accountType == AccountType.recurrentPayment)
-            // FutureBuilder(
-            //   future: FirebaseFirestore.instance.collection("Recurrents").doc(accountId).get(),
-            //   builder: (context,snapshot) {
-            //     double recurrentPayment = 0;
-            //     if(snapshot.hasData){
-            //       final data = snapshot.data;
-            //       if(data != null){
-            //         recurrentPayment = data['amount'];
-            //         selectedType = data['isDeposit']?'Ingreso':'Egreso';
-            //         // amountController!.text = recurrentPayment.toString();
-            //       }
-            //     }
-            //     return CustomDropDown(
-            //       isEditable: isEditable,
-            //       labeltext: 'Tipo:',
-            //       value: selectedType,
-            //       options: registryTypeOpts,
-            //       onChanged: (val){
-            //         selectedType = val!;
-            //         print(selectedType);
-            //       },
-            //     );
-            //   }
-            // ),
 
             CustomDropDown(
               isEditable: isEditable,
@@ -296,7 +259,6 @@ class _NewRegistryPage extends State<NewRegistryPage> {
       }
     });
   }).then((value) async{
-    //TODO:Quitar los Recurrents de las opciones de cuenta para los registro que vienen de Home
     await recurrentsRef.where("ownerId",isEqualTo: userId).get().then((value) {
       for (var doc in value.docs){
         Map<String,String> account = {

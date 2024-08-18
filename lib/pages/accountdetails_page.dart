@@ -1,11 +1,9 @@
-import 'dart:ffi';
 
 import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:app_fintes/business_logic/models/goal_model.dart';
 import 'package:app_fintes/business_logic/models/recurrent_model.dart';
 import 'package:app_fintes/business_logic/models/registry_model.dart';
-import 'package:app_fintes/business_logic/recurrent_functions.dart';
 import 'package:app_fintes/business_logic/registry_functions.dart';
 import 'package:app_fintes/business_logic/utilitity_functions.dart';
 import 'package:app_fintes/pages/drawer.dart';

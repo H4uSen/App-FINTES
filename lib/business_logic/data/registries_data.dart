@@ -1,4 +1,3 @@
-import 'package:app_fintes/business_logic/models/registry_model.dart';
 
 // List<Registry> registries = [
 //   Registry(
