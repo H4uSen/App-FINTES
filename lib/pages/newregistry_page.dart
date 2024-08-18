@@ -250,7 +250,7 @@ class _NewRegistryPage extends State<NewRegistryPage> {
                         } else {
                           errorScaffoldMsg(context, "No se pudo guardar el registro");
                         }
-                      });
+                      }).whenComplete(() => setState(() {}));
                     }
                   },
                 ),

@@ -79,7 +79,12 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            if(registry.comesFrom == '/home') {
+              Navigator.pushReplacementNamed(context, '/home');
+            }else{
+              Navigator.pop(context, true);
+            }
+            // Navigator.pop(context);
             setState(() {});
           },
           icon: const Icon(Icons.arrow_back),
@@ -236,7 +241,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                         return AlertDialog(
                           title: const Text('Confirmación',),
                           
-                          content: const Text('¿Desea eliminar este registro?',),
+                          content: const Text('¿Desea eliminar este registro?',maxLines: 2),
                           actions: [
                             TextButton(
                               onPressed: () {
@@ -249,12 +254,17 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                                 Navigator.pop(context, true);
                                 await deleteRegistry(registry.registryId).then((val){
                                   if(val){
+                                    print(registry.comesFrom);
                                     successScaffoldMsg(context, "Registro eliminado exitosamente");
-                                    Navigator.pushReplacementNamed(context, '/home');
+                                    if(registry.comesFrom == '/home') {
+                                      Navigator.pushReplacementNamed(context, '/home');
+                                    }else{
+                                    Navigator.pop(context, true);
+                                    }
                                   } else {
                                     errorScaffoldMsg(context, "No se pudo eliminar el registro");
                                   }
-                                });
+                                }).whenComplete(() => setState((){}));
                               }, 
                               child: const Text('Eliminar')
                             ),
@@ -313,15 +323,25 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                               ),
                               TextButton(
                                 onPressed: () async{
-                                  Navigator.pop(context, true);
+                                  
                                   await updateRegistry(newRegistry).then((val){
                                     if(val){
                                       successScaffoldMsg(context, "Registro guardado exitosamente");
-                                      Navigator.pop(context);
+                                      // if(registry.comesFrom == '/home') {
+                                      //   Navigator.pushReplacementNamed(context, '/home');
+                                      // }else{
+                                      //   Navigator.pop(context, true);
+                                      // }
+
+                                      //Navigator.pushReplacementNamed(context, '/home');
+                                      Navigator.pop(context, true);
+                                      setState(() {});
+                                      //Navigator.pop(context,true);
+                                      
                                     } else {
                                       errorScaffoldMsg(context, "No se pudo guardar el registro");
                                     }
-                                  });
+                                  }).whenComplete(() => setState((){}));
                                 }, 
                                 child: const Text('Guardar')
                               ),

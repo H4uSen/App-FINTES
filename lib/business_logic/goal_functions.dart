@@ -59,48 +59,50 @@ Future<double> getGoalCollected (String userId, String goalId) async {
                     title: const Text('Añadir meta'),
                     content: StatefulBuilder(
                       builder: (context, setState) {
-                        return Form(
-                          key: formKey,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CustomTextFormField(
-                                controller: goalNameController,
-                                isEditable: true,
-                                maxLength: 20,
-                                minLines: 1,
-                                maxLines: 2,
-                                labelText: 'Nombre de la meta',
-                                validator: (value) {
-                                  if (value == null || value.isEmpty|| value.trim().isEmpty) {
-                                    return 'Ingrese un nombre';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              CustomTextFormField(
-                                labelText: 'Cantidad', 
-                                isEditable: true, 
-                                controller: amountController,
-                                keyboardType: TextInputType.number,
-                                prefixText:'L.',
-                                textAlignment: TextAlign.end,
-                                maxLength: 20,
-                                maxLines: 1,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty|| value.trim().isEmpty) {
-                                    return 'Ingrese una cantidad';
-                                  }
-                                  if (double.tryParse(value) == null) {
-                                    return 'Ingrese un número válido';
-                                  }
-                                  if (double.parse(value) <= 0) {
-                                    return 'Ingrese un número mayor a 0';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ],
+                        return SingleChildScrollView(
+                          child: Form(
+                            key: formKey,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                CustomTextFormField(
+                                  controller: goalNameController,
+                                  isEditable: true,
+                                  maxLength: 20,
+                                  minLines: 1,
+                                  maxLines: 2,
+                                  labelText: 'Nombre',
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty|| value.trim().isEmpty) {
+                                      return 'Ingrese un nombre';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                CustomTextFormField(
+                                  labelText: 'Cantidad', 
+                                  isEditable: true, 
+                                  controller: amountController,
+                                  keyboardType: TextInputType.number,
+                                  prefixText:'L.',
+                                  textAlignment: TextAlign.end,
+                                  maxLength: 20,
+                                  maxLines: 1,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty|| value.trim().isEmpty) {
+                                      return 'Ingrese una cantidad';
+                                    }
+                                    if (double.tryParse(value) == null) {
+                                      return 'Ingrese un número válido';
+                                    }
+                                    if (double.parse(value) <= 0) {
+                                      return 'Ingrese un número mayor a 0';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       }
@@ -110,7 +112,7 @@ Future<double> getGoalCollected (String userId, String goalId) async {
                         onPressed: () {
                           Navigator.pop(context);
                         }, 
-                        child: const Text('Cancelar', style: TextStyle(color: CustomColors.black))
+                        child: Text('Cancelar', style: Theme.of(context).textTheme.bodyMedium)
                       ),
                       ElevatedButton(
                         onPressed: () {
@@ -130,7 +132,7 @@ Future<double> getGoalCollected (String userId, String goalId) async {
                               });
                           }
                         }, 
-                        child: const Text('Añadir', style: TextStyle(color: CustomColors.darkBlue))
+                        child: Text('Añadir', style: Theme.of(context).textTheme.bodyMedium!.apply(color: CustomColors.darkBlue))
                       ),
                     ],
                   );
@@ -152,7 +154,7 @@ Future<double> getGoalCollected (String userId, String goalId) async {
           onPressed: () {
             Navigator.pop(context);
           }, 
-          child: const Text('Cancelar', style: TextStyle(color: CustomColors.black))
+          child: Text('Cancelar', style: Theme.of(context).textTheme.bodyMedium)
         ),
         ElevatedButton(
           onPressed: () async {
@@ -172,7 +174,7 @@ Future<double> getGoalCollected (String userId, String goalId) async {
               errorScaffoldMsg(context, 'Error al eliminar la meta');
             });
           }, 
-          child: const Text('Eliminar', style: TextStyle(color: CustomColors.darkBlue))
+          child: Text('Eliminar', style: Theme.of(context).textTheme.bodyMedium!.apply(color: CustomColors.darkBlue))
         ),
       ],
     )
@@ -190,48 +192,50 @@ Future<double> getGoalCollected (String userId, String goalId) async {
         title: const Text('Editar meta'),
         content: StatefulBuilder(
           builder: (context, setState) {
-            return Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CustomTextFormField(
-                                controller: goalNameController,
-                                isEditable: true,
-                                maxLength: 20,
-                                minLines: 1,
-                                maxLines: 2,
-                                labelText: 'Nombre de la meta',
-                                validator: (value) {
-                                  if (value == null || value.isEmpty|| value.trim().isEmpty) {
-                                    return 'Ingrese un nombre';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              CustomTextFormField(
-                                labelText: 'Cantidad', 
-                                isEditable: true, 
-                                controller: amountController,
-                                keyboardType: TextInputType.number,
-                                prefixText:'L.',
-                                textAlignment: TextAlign.end,
-                                maxLength: 20,
-                                maxLines: 1,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty|| value.trim().isEmpty) {
-                                    return 'Ingrese una cantidad';
-                                  }
-                                  if (double.tryParse(value) == null) {
-                                    return 'Ingrese un número válido';
-                                  }
-                                  if (double.parse(value) <= 0) {
-                                    return 'Ingrese un número mayor a 0';
-                                  }
-                                  return null;
-                                },
-                              ),
-                ],
+            return SingleChildScrollView(
+              child: Form(
+                key: formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CustomTextFormField(
+                                  controller: goalNameController,
+                                  isEditable: true,
+                                  maxLength: 20,
+                                  minLines: 1,
+                                  maxLines: 2,
+                                  labelText: 'Nombre',
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty|| value.trim().isEmpty) {
+                                      return 'Ingrese un nombre';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                CustomTextFormField(
+                                  labelText: 'Cantidad', 
+                                  isEditable: true, 
+                                  controller: amountController,
+                                  keyboardType: TextInputType.number,
+                                  prefixText:'L.',
+                                  textAlignment: TextAlign.end,
+                                  maxLength: 20,
+                                  maxLines: 1,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty|| value.trim().isEmpty) {
+                                      return 'Ingrese una cantidad';
+                                    }
+                                    if (double.tryParse(value) == null) {
+                                      return 'Ingrese un número válido';
+                                    }
+                                    if (double.parse(value) <= 0) {
+                                      return 'Ingrese un número mayor a 0';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                  ],
+                ),
               ),
             );
           }
@@ -241,7 +245,7 @@ Future<double> getGoalCollected (String userId, String goalId) async {
             onPressed: () {
               Navigator.pop(context);
             }, 
-            child: const Text('Cancelar', style: TextStyle(color: CustomColors.black))
+            child: Text('Cancelar', style: Theme.of(context).textTheme.bodyMedium)
           ),
           ElevatedButton(
             onPressed: () {
@@ -262,7 +266,7 @@ Future<double> getGoalCollected (String userId, String goalId) async {
                   });
               }
             }, 
-            child: const Text('Editar', style: TextStyle(color: CustomColors.darkBlue))
+            child: Text('Guardar', style: Theme.of(context).textTheme.bodyMedium!.apply(color: CustomColors.darkBlue))
           ),
         ],
       );

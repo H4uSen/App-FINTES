@@ -7,6 +7,7 @@ class Registry {
   final double amount;
   final bool isDeposit;
   final String date;
+  String comesFrom = '';
 
   String accountName = '';
   String accountType; 

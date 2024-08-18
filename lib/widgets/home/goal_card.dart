@@ -45,9 +45,9 @@ class _GoalCardState extends State<GoalCard> {
                   ),
                   child: Text(
                     widget.title,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleLarge,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                 ),
                 const Padding(

@@ -58,27 +58,33 @@ Future<Account?> getAccountById (String accountId) async {
           title: const Text('Editar cuenta'),
           content: StatefulBuilder(
             builder: (context, setState) {
-              return Form(
-                key: formKey,
+              return SingleChildScrollView(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextFormField(
-                      controller: accountNameController,
-                      maxLength: 20,
-                      minLines: 1,
-                      maxLines: 2,
-                      decoration: const InputDecoration(
-                        labelText: 'Nombre de la cuenta',
-                        hintMaxLines: 2
-
+                    Form(
+                      key: formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: accountNameController,
+                            maxLength: 20,
+                            minLines: 1,
+                            maxLines: 2,
+                            decoration: const InputDecoration(
+                              labelText: 'Nombre',
+                              hintMaxLines: 2
+                    
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty|| value.trim().isEmpty) {
+                                return 'Ingrese un nombre';
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty|| value.trim().isEmpty) {
-                          return 'Ingrese un nombre';
-                        }
-                        return null;
-                      },
                     ),
                   ],
                 ),
@@ -90,7 +96,7 @@ Future<Account?> getAccountById (String accountId) async {
               onPressed: () {
                 Navigator.pop(context);
               }, 
-              child: const Text('Cancelar', style: TextStyle(color: CustomColors.black))
+              child: Text('Cancelar', style: Theme.of(context).textTheme.bodyMedium)
             ),
             ElevatedButton(
               onPressed: () {
@@ -110,7 +116,7 @@ Future<Account?> getAccountById (String accountId) async {
                     });
                 }
               }, 
-              child: const Text('Editar', style: TextStyle(color: CustomColors.darkBlue))
+              child: Text('Guardar', style: Theme.of(context).textTheme.bodyMedium!.apply(color: CustomColors.darkBlue))
             ),
           ],
         );
@@ -128,27 +134,33 @@ Future<Account?> getAccountById (String accountId) async {
           title: const Text('Añadir Cuenta'),
           content: StatefulBuilder(
             builder: (context, setState) {
-              return Form(
-                key: formKey,
+              return SingleChildScrollView(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextFormField(
-                      controller: accountNameController,
-                      maxLength: 20,
-                      minLines: 1,
-                      maxLines: 2,
-                      decoration: const InputDecoration(
-                        labelText: 'Nombre de la cuenta',
-                        hintMaxLines: 2,
-                        
+                    Form(
+                      key: formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                            controller: accountNameController,
+                            maxLength: 20,
+                            minLines: 1,
+                            maxLines: 2,
+                            decoration: const InputDecoration(
+                              labelText: 'Nombre',
+                              hintMaxLines: 2,
+                              
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty|| value.trim().isEmpty) {
+                                return 'Ingrese un nombre';
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty|| value.trim().isEmpty) {
-                          return 'Ingrese un nombre';
-                        }
-                        return null;
-                      },
                     ),
                   ],
                 ),
@@ -160,7 +172,7 @@ Future<Account?> getAccountById (String accountId) async {
               onPressed: () {
                 Navigator.pop(context);
               }, 
-              child: const Text('Cancelar', style: TextStyle(color: CustomColors.black))
+              child: Text('Cancelar', style: Theme.of(context).textTheme.bodyMedium)
             ),
             ElevatedButton(
               onPressed: () {
@@ -179,7 +191,7 @@ Future<Account?> getAccountById (String accountId) async {
                     });
                 }
               }, 
-              child: const Text('Añadir', style: TextStyle(color: CustomColors.darkBlue))
+              child: Text('Añadir', style: Theme.of(context).textTheme.bodyMedium!.apply(color: CustomColors.darkBlue))
             ),
           ],
         );
@@ -201,7 +213,7 @@ Future<Account?> getAccountById (String accountId) async {
             onPressed: () {
               Navigator.pop(context);
             }, 
-            child: const Text('Cancelar', style: TextStyle(color: CustomColors.black))
+            child: Text('Cancelar', style: Theme.of(context).textTheme.bodyMedium)
           ),
           ElevatedButton(
             onPressed: () async {
@@ -221,7 +233,7 @@ Future<Account?> getAccountById (String accountId) async {
                 errorScaffoldMsg(context, 'Error al eliminar la cuenta');
               });
             }, 
-            child: const Text('Eliminar', style: TextStyle(color: CustomColors.darkBlue))
+            child: Text('Eliminar', style: Theme.of(context).textTheme.bodyMedium!.apply(color: CustomColors.darkBlue))
           ),
         ],
       )

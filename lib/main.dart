@@ -33,7 +33,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '/principal',
       routes: {
-        '/principal': (context) => const PrincipalPage(),
+        '/principal': (context) => const PrincipalPage(), 
         '/login': (context) => const LoginPage(),
         '/registro': (context) => const RegistroPage(),
         '/home': (context) => const InicioPage(),
