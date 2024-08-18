@@ -166,7 +166,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
               future: accountsFuture,
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 
-                
+                bool willEdit = false;
                 final response = snapshotValidation(snapshot);
                 if(response != null) return response;
 
@@ -182,7 +182,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                 selectedAccount = "${registry.accountId}-${registry.accountType}";
 
                 return CustomDropDown(
-                  isEditable: isEditable,
+                  isEditable: willEdit,
                   labeltext: 'Cuenta:',
                   value: selectedAccount,
                   options: accountOptions,
@@ -296,6 +296,7 @@ class _RegistrydetailsPageState extends State<RegistrydetailsPage> {
                         isDeposit: (selectedType == 'Ingreso'),
                         date: registry.date,
                       );
+                      
                       showDialog(
                         context: context, 
                         builder: 

@@ -5,17 +5,19 @@ class Account {
   final String accountId;
   final String accountName;
   final String ownerId;
-  final String accountType = AccountType.account;
+  final String accountType;
 
   const Account({
     required this.ownerId,
     this.accountId ="",
+    this.accountType = AccountType.account,
     required this.accountName,
   });
 
   factory Account.fromJson(Map<String, dynamic> json, String id) {
     return Account(
       accountId: id,
+      accountType: AccountType.account,
       ownerId: json['ownerId'],
       accountName: json['name'],
     );
@@ -24,7 +26,8 @@ class Account {
   Map<String, dynamic> toJson() {
     return {
       'ownerId': ownerId,
-      'accountName': accountName,
+      'name': accountName,
+      'type': accountType,
     };
   }
   

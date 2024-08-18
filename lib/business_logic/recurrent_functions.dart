@@ -17,6 +17,22 @@ List<RecurrentPayment> getUserRecurrents(String userId) {
   return recurrents;
 }
 
+
+Future<List<RecurrentPayment>> getRecurrents(String userId) async {
+  List<RecurrentPayment> recurrents = [];
+  FirebaseFirestore.instance.collection('Recurrents')
+    .where('ownerId', isEqualTo: userId)
+    .get()
+    .then((value) {
+      for (var doc in value.docs){
+        RecurrentPayment recurrent = RecurrentPayment.fromJson(doc.data(), doc.id);
+        recurrents.add(recurrent);
+      }
+    })
+    .catchError((error){});
+  return recurrents;
+}
+
 double getRecurrentDeposits (String userId, String recurrentId) {
   double deposits = 0;
   FirebaseFirestore.instance.collection('Registries')

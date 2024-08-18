@@ -12,7 +12,7 @@ class RecurrentPayment {
   String accountType;
 
   RecurrentPayment({
-    required this.accountId,
+    this.accountId ="",
     this.accountType = AccountType.recurrentPayment,
     required this.ownerId,
     required this.isDeposit,
@@ -36,10 +36,10 @@ class RecurrentPayment {
   Map<String, dynamic> toJson() {
     return {
       'accountId': accountId,
-      'accountType': accountType,
+      'type': accountType,
       'ownerId': ownerId,
-      'recurrentName': recurrentName,
-      'recurrentAmount': recurrentAmount,
+      'name': recurrentName,
+      'amount': recurrentAmount,
       'isDeposit': isDeposit,
 
     };

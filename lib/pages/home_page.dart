@@ -25,8 +25,7 @@ class InicioPage extends StatefulWidget {
 }
 
 class _InicioPageState extends State<InicioPage> {
-  
-  
+
   @override
   Widget build(BuildContext context) {
   if(globalUser == null) {

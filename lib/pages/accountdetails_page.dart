@@ -26,6 +26,7 @@ class AccountDetailsPage extends StatefulWidget {
 }
 
 class _AccountDetailsPageState extends State<AccountDetailsPage> {
+  
   @override
   Widget build(BuildContext context) {
     final registriesRef = FirebaseFirestore.instance.collection('Registries');

@@ -25,7 +25,7 @@ class _NewRegistryPage extends State<NewRegistryPage> {
   TextEditingController? titleController = TextEditingController();
   TextEditingController? descriptionController = TextEditingController();
   TextEditingController? amountController = TextEditingController();
-  String? selectedType, selectedAccount;
+  String? selectedType = "Ingreso", selectedAccount;
   late Future<List<Map<String, dynamic>>> accountsFuture;
 
 
@@ -64,7 +64,7 @@ class _NewRegistryPage extends State<NewRegistryPage> {
         child: Text('Egreso'),
       ),
     ];
-    selectedType = registryTypeOpts[0].value;
+    //selectedType = registryTypeOpts[0].value;
 
 
     return Scaffold(
@@ -131,6 +131,7 @@ class _NewRegistryPage extends State<NewRegistryPage> {
                 if(response != null) return response;
 
                 final accounts = snapshot.data;
+                
 
                 // if(accountType == AccountType.recurrentPayment){
                 //   final recurrentRef = FirebaseFirestore.instance.collection("Recurrents").doc(accountId);
@@ -165,35 +166,36 @@ class _NewRegistryPage extends State<NewRegistryPage> {
               },
             ),
 
-            if(accountType == AccountType.recurrentPayment)
-            FutureBuilder(
-              future: FirebaseFirestore.instance.collection("Recurrents").doc(accountId).get(),
-              builder: (context,snapshot) {
-                double recurrentPayment = 0;
-                if(snapshot.hasData){
-                  final data = snapshot.data;
-                  if(data != null){
-                    recurrentPayment = data['amount'];
-                    selectedType = data['isDeposit']?'Ingreso':'Egreso';
-                    // amountController!.text = recurrentPayment.toString();
-                  }
-                }
-                return CustomDropDown(
-                  isEditable: isEditable,
-                  labeltext: 'Tipo:',
-                  value: selectedType,
-                  options: registryTypeOpts,
-                  onChanged: (val){
-                    selectedType = val!;
-                  },
-                );
-              }
-            ),
-            if(accountType != AccountType.recurrentPayment)
+            // if(accountType == AccountType.recurrentPayment)
+            // FutureBuilder(
+            //   future: FirebaseFirestore.instance.collection("Recurrents").doc(accountId).get(),
+            //   builder: (context,snapshot) {
+            //     double recurrentPayment = 0;
+            //     if(snapshot.hasData){
+            //       final data = snapshot.data;
+            //       if(data != null){
+            //         recurrentPayment = data['amount'];
+            //         selectedType = data['isDeposit']?'Ingreso':'Egreso';
+            //         // amountController!.text = recurrentPayment.toString();
+            //       }
+            //     }
+            //     return CustomDropDown(
+            //       isEditable: isEditable,
+            //       labeltext: 'Tipo:',
+            //       value: selectedType,
+            //       options: registryTypeOpts,
+            //       onChanged: (val){
+            //         selectedType = val!;
+            //         print(selectedType);
+            //       },
+            //     );
+            //   }
+            // ),
+
             CustomDropDown(
               isEditable: isEditable,
               labeltext: 'Tipo:',
-              value: selectedType,
+              value: registryTypeOpts[0].value,
               options: registryTypeOpts,
               onChanged: (val){
                 selectedType = val!;
@@ -234,9 +236,10 @@ class _NewRegistryPage extends State<NewRegistryPage> {
                         accountId: selectedAccount!.split("-")[0],
                         accountType: selectedAccount!.split("-")[1],
                         ownerId: globalUser!.id,
-                        isDeposit: (selectedType == 'Ingreso'),
+                        isDeposit: selectedType == 'Ingreso',
                         date: formattedDate(DateTime.now()),
                       );
+                      successScaffoldMsg(context, "Registro guardado exitosamente");
                       
                       await createRegistry(newRegistry).then((val){
                         if(val){

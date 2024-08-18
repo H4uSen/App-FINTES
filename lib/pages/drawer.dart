@@ -96,7 +96,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
                 
 
-                //TODO: Hacer que los botones se les ponga una sombra para identificar la pagina actual y añadir la navegación a las otras paginas
                 const CustomDivider(title: 'Cuentas'),
                 for (var account in widget.accounts)
                     DrawerNavTile(
@@ -153,7 +152,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       title: recurrent.recurrentName, 
                       icon: Icons.lock_clock,
                       subtitle: fixedCurrency(recurrent.recurrentAmount, "L."),
-                      subColor: CustomColors.red,
+                      subColor: (recurrent.isDeposit) ? CustomColors.green : CustomColors.red,
                       onTap: (){
                         Navigator.pushNamed(context, 
                           '/accountdetails', 
