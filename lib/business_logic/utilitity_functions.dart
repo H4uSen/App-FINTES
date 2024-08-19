@@ -11,11 +11,20 @@ void setSelectedDrawerOption(String drawerOption) {
 String transactionSymbol (bool isDeposit) {
   return isDeposit ? '+' : '-';
 }
+// String fixedCurrency ( double amount, [String? currency]) {
+//   if(currency == null || currency.isEmpty) {
+//     return amount.toStringAsFixed(2);
+//   }else {
+//     return '$currency ${amount.toStringAsFixed(2)}';
+//   }
+// }
+
 String fixedCurrency ( double amount, [String? currency]) {
+  final formatter = NumberFormat("#,##0.00");
   if(currency == null || currency.isEmpty) {
-    return amount.toStringAsFixed(2);
+    return formatter.format(amount);
   }else {
-    return '$currency ${amount.toStringAsFixed(2)}';
+    return '$currency ${formatter.format(amount)}';
   }
 }
 
