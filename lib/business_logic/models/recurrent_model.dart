@@ -6,10 +6,12 @@ class RecurrentPayment {
   final String recurrentId;
   final String recurrentName;
   final double recurrentAmount;
+  int recurrentDay;
   final bool isDeposit;
   final String ownerId;
   final String accountId;
   String accountType;
+  
 
   RecurrentPayment({
     this.accountId ="",
@@ -17,6 +19,7 @@ class RecurrentPayment {
     required this.ownerId,
     required this.isDeposit,
     this.recurrentId = "",
+    this.recurrentDay = 1,
     required this.recurrentName,
     required this.recurrentAmount,
   });
@@ -27,6 +30,7 @@ class RecurrentPayment {
       accountType: json['type'],
       ownerId: json['ownerId'],
       recurrentId: id,
+      recurrentDay: int.parse(json['day'].toString()),
       recurrentName: json['name'].toString(),
       recurrentAmount: double.parse(json['amount'].toString()),
       isDeposit: json['isDeposit'],
@@ -41,7 +45,7 @@ class RecurrentPayment {
       'name': recurrentName,
       'amount': recurrentAmount,
       'isDeposit': isDeposit,
-
+      'day': recurrentDay,
     };
   }
 }

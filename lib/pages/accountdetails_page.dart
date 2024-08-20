@@ -1,4 +1,5 @@
 
+
 import 'package:app_fintes/business_logic/data/globals.dart';
 import 'package:app_fintes/business_logic/models/account_model.dart';
 import 'package:app_fintes/business_logic/models/goal_model.dart';
@@ -165,7 +166,52 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
                 );
             }
           ),
+          //Para poner el día de facturación de los pagos recurrentes
+          if(argAccountType == AccountType.recurrentPayment)
+            FutureBuilder(
+              future: FirebaseFirestore.instance.collection('Recurrents').doc(argAccountId).get(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if(snapshot.hasError){
+                  return const Center(child: Text('Error al cargar los datos'));
+                }
+                final data = snapshot.data;
+                if (data == null) {
+                  return const Text('No hay documentos');
+                }
+                RecurrentPayment recurrent = RecurrentPayment.fromJson(data.data(), data.id);
+                String daysLeft;
+                int currentDay = DateTime.now().day;
+                int recurrentDay = recurrent.recurrentDay;
+                if(recurrentDay - currentDay < 0){
+                  daysLeft = (recurrent.recurrentDay + 30 - currentDay).toString();
+                }else{
+                  daysLeft = (recurrent.recurrentDay - currentDay).toString();
+                }
 
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Dia de pago: ${recurrent.recurrentDay} de cada mes",
+                      style: Theme.of(context).textTheme.bodyMedium!.apply(color: CustomColors.darkBlue),
+                      textAlign: TextAlign.start,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      ),
+                    Text(
+                      "Faltan $daysLeft días para el próximo pago",
+                      style: Theme.of(context).textTheme.bodyMedium!.apply(color: CustomColors.darkBlue),
+                      textAlign: TextAlign.start,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      ),
+                  ],
+                );
+              },
+            ),
             const CustomDivider(title: "Actividad reciente"),
             FutureBuilder(
               future: registriesRef.where('ownerId', isEqualTo: globalUser!.id).where('accountId', isEqualTo: argAccountId).get(),

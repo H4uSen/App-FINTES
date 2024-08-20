@@ -93,6 +93,7 @@ double getRecurrentWithdrawals (String userId, String recurrentId) {
     ];
       TextEditingController recurrentNameController = TextEditingController(text: account.recurrentName);
       TextEditingController recurrentAmountController = TextEditingController(text: account.recurrentAmount.toString());
+      TextEditingController recurrentDayController = TextEditingController(text: account.recurrentDay.toString());
       String? selectedType = account.isDeposit ? 'Ingreso' : 'Egreso';
       return AlertDialog(
         title: const Text('Editar cuenta'),
@@ -142,6 +143,31 @@ double getRecurrentWithdrawals (String userId, String recurrentId) {
                           return null;
                         },
                       ),
+                      CustomTextFormField(
+                          labelText: 'Dia de pago', 
+                          isEditable: true, 
+                          controller: recurrentDayController,
+                          keyboardType: TextInputType.number,
+                          textAlignment: TextAlign.end,
+                          maxLength: 2,
+                          maxLines: 1,
+                          validator: (value) {
+                            if (value == null || value.isEmpty|| value.trim().isEmpty) {
+                              return 'Ingrese una cantidad';
+                            }
+                            if (double.tryParse(value) == null) {
+                              return 'Ingrese un número válido';
+                            }
+                            if (double.parse(value) <= 1) {
+                              return 'Ingrese un número mayor a 1';
+                            }
+                            if (double.parse(value) > 31) {
+                              return 'Ingrese un número menor a 30';
+                            }
+                            
+                            return null;
+                          },
+                        ),
                       CustomDropDown(
                         isEditable: true,
                         labeltext: 'Tipo:',
@@ -173,6 +199,7 @@ double getRecurrentWithdrawals (String userId, String recurrentId) {
                   recurrentAmount: double.parse(recurrentAmountController.text),
                   isDeposit: selectedType == 'Ingreso',
                   recurrentName: recurrentNameController.text,
+                  recurrentDay: int.parse(recurrentDayController.text),
                   ownerId: globalUser!.id);
                 FirebaseFirestore.instance.collection('Recurrents')
                   .doc(account.recurrentId)
@@ -253,6 +280,7 @@ double getRecurrentWithdrawals (String userId, String recurrentId) {
       final formKey = GlobalKey<FormState>();
       TextEditingController recurrentNameController = TextEditingController();
       TextEditingController recurrentAmountController = TextEditingController();
+      TextEditingController recurrentDayController = TextEditingController();
       return AlertDialog(
         title: const Text('Añadir pago recurrente'),
         content: StatefulBuilder(
@@ -301,6 +329,31 @@ double getRecurrentWithdrawals (String userId, String recurrentId) {
                             return null;
                           },
                         ),
+                        CustomTextFormField(
+                          labelText: 'Dia de pago', 
+                          isEditable: true, 
+                          controller: recurrentDayController,
+                          keyboardType: TextInputType.number,
+                          textAlignment: TextAlign.end,
+                          maxLength: 2,
+                          maxLines: 1,
+                          validator: (value) {
+                            if (value == null || value.isEmpty|| value.trim().isEmpty) {
+                              return 'Ingrese una cantidad';
+                            }
+                            if (double.tryParse(value) == null) {
+                              return 'Ingrese un número válido';
+                            }
+                            if (double.parse(value) <= 1) {
+                              return 'Ingrese un número mayor a 1';
+                            }
+                            if (double.parse(value) > 31) {
+                              return 'Ingrese un número menor a 30';
+                            }
+                            
+                            return null;
+                          },
+                        ),
                         CustomDropDown(
                           isEditable: true,
                           labeltext: 'Tipo:',
@@ -330,7 +383,9 @@ double getRecurrentWithdrawals (String userId, String recurrentId) {
               if (formKey.currentState!.validate()) {
                 final newRecurrent = RecurrentPayment(
                   isDeposit: selectedType == 'Ingreso',
-                  recurrentAmount: double.parse(recurrentAmountController.text),                    recurrentName: recurrentNameController.text,
+                  recurrentAmount: double.parse(recurrentAmountController.text),                    
+                  recurrentName: recurrentNameController.text,
+                  recurrentDay: int.parse(recurrentDayController.text),
                   ownerId: globalUser!.id);
                 FirebaseFirestore.instance.collection('Recurrents')
                   .add(newRecurrent.toJson())

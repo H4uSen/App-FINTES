@@ -65,7 +65,7 @@ class _InicioPageState extends State<InicioPage> {
               }
 
               final goalAccounts = data['goals'] as List<Goal>;
-              emptyHeight = goalAccounts.isEmpty ? 100 : 265;
+              emptyHeight = goalAccounts.isEmpty ? 140 : 250;
               
               return SizedBox(
                 height: emptyHeight,
@@ -77,7 +77,7 @@ class _InicioPageState extends State<InicioPage> {
                       child: const CustomDivider(title: "Vacío", showLines: false),
                       ),
                     SizedBox(
-                      height: emptyHeight,
+                      height: goalAccounts.isEmpty?1:emptyHeight,
                       child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: goalAccounts.length,
@@ -85,7 +85,7 @@ class _InicioPageState extends State<InicioPage> {
                                 double goal = goalAccounts[index].goalAmount;
                                 double collected = goalAccounts[index].goalCollected;
                                 return SizedBox(
-                                  width: 400,
+                                  width: 370,
                                   child: GoalCard(
                                     
                                     title: goalAccounts[index].goalName,
