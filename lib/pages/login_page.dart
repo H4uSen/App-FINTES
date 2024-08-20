@@ -1,10 +1,14 @@
 // pages/login_page.dart
 import 'package:app_fintes/business_logic/data/globals.dart';
+import 'package:app_fintes/business_logic/models/user_model.dart' as mdl;
 import 'package:app_fintes/business_logic/user_functions.dart';
 import 'package:app_fintes/widgets/custom.dart';
+import 'package:app_fintes/widgets/form/custom_button.dart';
 import 'package:app_fintes/widgets/scaffoldmsgs.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,6 +23,11 @@ class LoginPageState extends State<LoginPage> {
   final contraseniaController = TextEditingController();
 
   bool _obscureContrasenia = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +102,7 @@ class LoginPageState extends State<LoginPage> {
                             globalUser = value;
                             Navigator.pushReplacementNamed(context, '/home');
                           }else{
-                            errorScaffoldMsg(context, 'Correo o contraseña incorrectos');
+                            errorScaffoldMsg(context, 'Correo o contraseña incorrecta');
                             return;
                           }
                         });
@@ -116,6 +125,43 @@ class LoginPageState extends State<LoginPage> {
                       ),
                       
                     ),
+                    const SizedBox(height: 60),
+                    
+                    
+
+                    CustomOutlinedButton(
+                    label: 'Iniciar sesión con google',
+                    backgroundColor: CustomColors.darkBlue,
+                    borderColor: CustomColors.darkBlue,
+                    onPressed: () async {
+                      await signInWithGoogle(correoController.text, contraseniaController.text).then((userCred) async {
+                        if (userCred != null) {
+                          globalUser = mdl.User(
+                            name: userCred.user!.displayName!, 
+                            email: userCred.user!.email!,
+                            password: userCred.user!.uid,
+                            );
+                            await getUserByEmail(userCred.user!.email!).then((value)async {
+                              if (value != null) {
+                                globalUser!.id = value.id;
+                                Navigator.pushReplacementNamed(context, '/home');
+                              }else{
+                                await register(mdl.User(
+                                  name: userCred.user!.displayName!, 
+                                  email: userCred.user!.email!,  
+                                  password: contraseniaController.text)).then((val){
+                                    Navigator.pushReplacementNamed(context, '/home');
+                                  });
+                              }
+
+                            });
+                        }else{
+                          errorScaffoldMsg(context, 'Error al iniciar sesión con Google');
+                          return;
+                        }
+                      });
+                    },
+                    )
                   ],
                 ),
               ),
@@ -124,5 +170,32 @@ class LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+}
+
+
+Future<UserCredential?> signInWithGoogle(String email, String password) async{
+  try{
+      // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'user-not-found') {
+      
+    } else if (e.code == 'wrong-password') {
+    
+    }
+    return null;
   }
 }

@@ -6,8 +6,12 @@ void successScaffoldMsg(BuildContext context,String message,
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: backgroundColor,
-        content: Text(message, 
-          style: Theme.of(context).textTheme.titleSmall!.apply(color: textColor)),
+        content: Text(
+          message, 
+          style: Theme.of(context).textTheme.titleSmall!.apply(color: textColor),
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+          ),
         duration: const Duration(seconds: 3),
         
       ),
@@ -27,7 +31,7 @@ void successScaffoldMsg(BuildContext context,String message,
             ),
             Text(message,
               overflow: TextOverflow.ellipsis,
-              maxLines: 1, 
+              maxLines: 2, 
               style: Theme.of(context).textTheme.bodyMedium!.apply(color: textColor,)),
           ],
         ),

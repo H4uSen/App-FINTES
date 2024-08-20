@@ -12,7 +12,20 @@
           "package_name": "com.aela.fintes"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "48312127542-m0o5rpf5m3f3f17au49na0skrl8vnmkt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aela.fintes",
+            "certificate_hash": "235b43cec76b03ea8e96c312593852d1285f0523"
+          }
+        },
+        {
+          "client_id": "48312127542-fabu8ea7mevsmsgggotacs828nk9doil.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAgZQJPziI7r9gS-mAwqvt4mf-Sbu-x2Nw"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48312127542-fabu8ea7mevsmsgggotacs828nk9doil.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

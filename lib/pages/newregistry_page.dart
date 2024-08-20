@@ -202,7 +202,6 @@ class _NewRegistryPage extends State<NewRegistryPage> {
                         isDeposit: selectedType == 'Ingreso',
                         date: formattedDate(DateTime.now()),
                       );
-                      successScaffoldMsg(context, "Registro guardado exitosamente");
                       
                       await createRegistry(newRegistry).then((val){
                         if(val){

@@ -35,6 +35,7 @@ class CustomOutlinedButton extends StatelessWidget {
       width: width, 
       height: height, 
       child: OutlinedButton(
+        
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           backgroundColor: backgroundColor,
