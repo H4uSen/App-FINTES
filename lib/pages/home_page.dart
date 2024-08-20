@@ -25,66 +25,15 @@ class _InicioPageState extends State<InicioPage> {
 
   @override
   Widget build(BuildContext context) {
+  setSelectedDrawerOption('Inicio');
   final registriesRef = FirebaseFirestore.instance.collection('Registries');
-
-    
   if(globalUser == null) {
     Navigator.pushReplacementNamed(context, '/principal');
   }
+
   User user = globalUser!;
 
-  //bool hasGoals = false;
   bool hasRegistries = false;
-
-  
-Future<Map<String, dynamic>> fetchData (String userId) async {
-  
-  final goalsRef = FirebaseFirestore.instance.collection('Goals');
-  //final registriesRef = FirebaseFirestore.instance.collection('Registries');
-    List<Goal> goals = [];
-    List<Registry> allRegistries = [];
-    
-    
-    await goalsRef.where('ownerId', isEqualTo: userId).get().then((value) async{
-      for (var doc in value.docs){
-        Goal goal = Goal.fromJson(doc.data(), doc.id);
-        goals.add(goal);
-      }
-    }).catchError((error){});
-
-    await registriesRef.where("ownerId",isEqualTo: globalUser!.id).get().then((value) async{
-      for (var doc in value.docs){
-        Registry registry = Registry.fromJson(doc.data(), doc.id);
-        final accountName = await getAccountName(registry.accountId,registry.accountType);
-        registry.accountName = accountName;
-        allRegistries.add(registry);
-      }
-    }).catchError((error){});
-
-    //Para traer el monto reunido de las metas
-    for(var goal in goals){
-      await registriesRef.where('ownerId', isEqualTo: userId).where('accountId', isEqualTo: goal.goalId).get()
-        .then((value) {
-          double deposits = 0;
-          double withdrawals = 0;
-          for (var doc in value.docs){
-            Registry registry = Registry.fromJson(doc.data(), doc.id);
-            if(registry.isDeposit) {
-              deposits += registry.amount;
-            } else {
-              withdrawals += registry.amount;
-            }
-          }
-          goal.goalCollected = deposits - withdrawals;
-        })
-        .catchError((error){});
-    }
-
-    //hasGoals = goals.isNotEmpty;
-    //hasRegistries = allRegistries.isNotEmpty;
-
-    return {'goals': goals, 'registries': allRegistries};
-  }
     
 
     return Scaffold(
@@ -99,7 +48,8 @@ Future<Map<String, dynamic>> fetchData (String userId) async {
         children: [
           const CustomDivider(title: 'Resumen de metas'),
           FutureBuilder(
-            future: fetchData(user.id),
+            //future: fetchData(user.id),
+            future: fetchGoalData(),
             builder: (context, snapshot) {
               double emptyHeight =0;
               if(snapshot.connectionState == ConnectionState.waiting){
@@ -113,9 +63,8 @@ Future<Map<String, dynamic>> fetchData (String userId) async {
               if (data == null) {
                 return const Text('No hay documentos');
               }
-              hasRegistries = data['registries'].isNotEmpty;
+
               final goalAccounts = data['goals'] as List<Goal>;
-              //hasGoals = goalAccounts.isNotEmpty;
               emptyHeight = goalAccounts.isEmpty ? 100 : 265;
               
               return SizedBox(
@@ -175,13 +124,13 @@ Future<Map<String, dynamic>> fetchData (String userId) async {
             child: const CustomDivider(title: "Vacío", showLines: false),
             ),
           FutureBuilder(
-            future: fetchData(user.id), 
+            future: fetchRegData(), 
             builder:(context, snapshot){
               if(snapshot.connectionState == ConnectionState.waiting){
                 return const Center(child: CircularProgressIndicator());
               }
               if(snapshot.hasError){
-                return const Center(child: Text('Error al cargar las metas'));
+                return const Center(child: Text('Error al cargar los registros'));
               }
               final data = snapshot.data;
 
@@ -244,3 +193,65 @@ Future<Map<String, dynamic>> fetchData (String userId) async {
   }
 }
 
+Future<Map<String, dynamic>> fetchGoalData() async{
+  final registriesRef = FirebaseFirestore.instance.collection('Registries');
+  final goalsRef = FirebaseFirestore.instance.collection('Goals'); 
+  List<Goal> goals = [];
+  List<Registry> allRegistries = [];
+
+  await goalsRef.where('ownerId', isEqualTo: globalUser!.id).get().then((value) async{
+    for (var doc in value.docs){
+      Goal goal = Goal.fromJson(doc.data(), doc.id);
+      goals.add(goal);
+    }
+  }).catchError((error){}).whenComplete(()async{
+    await registriesRef
+    .where("ownerId",isEqualTo: globalUser!.id)
+    .where('accountType', isEqualTo: AccountType.goal)
+    .get().then((value) async{
+      for (var doc in value.docs){
+        Registry registry = Registry.fromJson(doc.data(), doc.id);
+        allRegistries.add(registry);
+      }
+    }).catchError((error){}).whenComplete((){
+      for(var goal in goals){
+        double deposits = 0;
+        double withdrawals = 0;
+        for (var registry in allRegistries){
+          if(registry.accountId == goal.goalId){
+            if(registry.isDeposit) {
+              deposits += registry.amount;
+            } else {
+              withdrawals += registry.amount;
+            }
+          }
+        }
+        goal.goalCollected = deposits - withdrawals;
+      }
+    });
+  });
+  
+  
+  return {'goals': goals};
+}
+
+
+Future<Map<String, dynamic>> fetchRegData() async{
+  final registriesRef = FirebaseFirestore.instance.collection('Registries');
+  List<Registry> allRegistries = [];
+
+  await registriesRef
+  .where("ownerId",isEqualTo: globalUser!.id)
+  .orderBy("date",descending: true)
+  .limit(20)
+  .get()
+  .then((value) async{
+      for (var doc in value.docs){
+        Registry registry = Registry.fromJson(doc.data(), doc.id);
+        final accountName = await getAccountName(registry.accountId,registry.accountType);
+        registry.accountName = accountName;
+        allRegistries.add(registry);
+      }
+    }).catchError((error){});
+  return {"registries": allRegistries};
+}

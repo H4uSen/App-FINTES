@@ -39,7 +39,7 @@ class _GestionCuentasState extends State<GestionCuentas> {
         leading: IconButton(
             onPressed: () {
               Navigator.pushReplacementNamed(context, "/home");
-              
+              //setSelectedDrawerOption('Inicio');
             }, 
             icon: const Icon(Icons.arrow_back)
           ),

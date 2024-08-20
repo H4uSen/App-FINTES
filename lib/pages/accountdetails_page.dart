@@ -64,8 +64,11 @@ class _AccountDetailsPageState extends State<AccountDetailsPage> {
       int amountPayments = 0;
       dynamic account;
       String collectionName = (accountType == AccountType.goal)?"Goals":(accountType == AccountType.account)?"Accounts":"Recurrents";
-      await registriesRef.where('ownerId', isEqualTo: userId).where('accountId', isEqualTo: accountId).get()
-        .then((value) {
+      await registriesRef
+      .where('ownerId', isEqualTo: userId)
+      .where('accountId', isEqualTo: accountId)
+      .orderBy("date", descending: true).get()
+      .then((value) {
           amountPayments = value.docs.length;
           for (var doc in value.docs){
             Registry registry = Registry.fromJson(doc.data(), doc.id);

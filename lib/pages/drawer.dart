@@ -12,7 +12,6 @@ import 'package:app_fintes/widgets/drawer/drawer_navtile.dart';
 import 'package:app_fintes/widgets/drawer/setting_navtile.dart';
 import 'package:app_fintes/widgets/theme_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatefulWidget {
