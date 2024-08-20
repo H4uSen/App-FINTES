@@ -34,7 +34,7 @@ class PrincipalPage extends StatelessWidget {
                         fontSize: 100,
                         fontFamily: 'Roboto',
                         fontWeight: FontWeight.bold,
-                        color: Colors.black, 
+                        color: CustomColors.black, 
                       ),
                     ),
                     const SizedBox(height: 15),
